@@ -17,6 +17,8 @@ position = Vector2(338.7734, 318.21875)
 scale = Vector2(1.3094788, 1.2469481)
 texture = ExtResource("1_xal5j")
 
+[node name="player" parent="Sprite2D" unique_id=1297489525 instance=ExtResource("2_efgsu")]
+
 [node name="Floor" type="StaticBody2D" parent="Sprite2D" unique_id=1009370634]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Floor" unique_id=901512804]
@@ -28,5 +30,3 @@ shape = SubResource("SegmentShape2D_efgsu")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Walls" unique_id=25507975]
 position = Vector2(-7.9660664, 180.26512)
 shape = SubResource("RectangleShape2D_xal5j")
-
-[node name="player" parent="Sprite2D" unique_id=1297489525 instance=ExtResource("2_efgsu")]
