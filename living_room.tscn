@@ -1,3 +1,32 @@
 [gd_scene format=3 uid="uid://cs0gm1b1qqa85"]
 
+[ext_resource type="Texture2D" uid="uid://t1y812myc67x" path="res://assets/CatRoomFree/ExampleRoom.png" id="1_xal5j"]
+[ext_resource type="PackedScene" uid="uid://bpgctqjjg1go4" path="res://player.tscn" id="2_efgsu"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_efgsu"]
+a = Vector2(121.70389, 39.29593)
+b = Vector2(-176.5813, 39.29593)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xal5j"]
+size = Vector2(298.28516, 140.34262)
+
 [node name="LivingRoom" type="Node2D" unique_id=1583328751]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1660464398]
+position = Vector2(338.7734, 318.21875)
+scale = Vector2(1.3094788, 1.2469481)
+texture = ExtResource("1_xal5j")
+
+[node name="Floor" type="StaticBody2D" parent="Sprite2D" unique_id=1009370634]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Floor" unique_id=901512804]
+position = Vector2(22.570545, 72.00079)
+shape = SubResource("SegmentShape2D_efgsu")
+
+[node name="Walls" type="StaticBody2D" parent="Sprite2D" unique_id=868965331]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Walls" unique_id=25507975]
+position = Vector2(-7.9660664, 180.26512)
+shape = SubResource("RectangleShape2D_xal5j")
+
+[node name="player" parent="Sprite2D" unique_id=1297489525 instance=ExtResource("2_efgsu")]
