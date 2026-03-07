@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://d3m6c4je48grl" path="res://mouse.tscn" id="3_378y4"]
 
 [node name="LivingRoom" type="Node2D" unique_id=1583328751]
+scale = Vector2(1.2, 1.2)
 
 [node name="room" parent="." unique_id=314867672 instance=ExtResource("1_efgsu")]
 position = Vector2(560, 345)
