@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bgt837awipt6u" path="res://assets/AllCatsDemo/Brown/IdleCattt.png" id="2_left_cat"]
 [ext_resource type="Texture2D" uid="uid://ci4w1tkl0r4gl" path="res://assets/AllCatsDemo/EgyptCatFree/IdleCatb.png" id="3_right_cat"]
 [ext_resource type="Script" uid="uid://bj8ywkt8puiyc" path="res://scripts/menu_script.gd" id="4_cx167"]
+[ext_resource type="Texture2D" uid="uid://cxnfb7rs7d7mu" path="res://assets/sus_cat.png" id="5_dolsu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
 bg_color = Color(0.109804, 0.0941176, 0.0823529, 0.84)
@@ -142,6 +143,26 @@ flip_h = true
 hframes = 7
 frame = 4
 
+[node name="Options_cat" type="TextureRect" parent="Screen" unique_id=691931631]
+visible = false
+top_level = true
+layout_mode = 0
+offset_left = 308.0
+offset_top = 100.0
+offset_right = 889.0
+offset_bottom = 479.0
+texture = ExtResource("5_dolsu")
+
+[node name="CloseButton" type="Button" parent="Screen/Options_cat" unique_id=1934682607]
+layout_mode = 0
+offset_right = 51.0
+offset_bottom = 42.0
+text = "X"
+
+[node name="ShowTimer" type="Timer" parent="Screen" unique_id=1633103977]
+wait_time = 2.0
+one_shot = true
+
 [node name="MenuCenter" type="CenterContainer" parent="Screen" unique_id=1464711805]
 layout_mode = 0
 anchor_right = 1.0
@@ -242,5 +263,6 @@ text = "V 0.1.0"
 label_settings = SubResource("LabelSettings_footer")
 horizontal_alignment = 1
 
+[connection signal="timeout" from="Screen/ShowTimer" to="Screen/MenuCenter" method="_on_timer_timeout"]
 [connection signal="pressed" from="Screen/MenuCenter/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/StartButton" to="Screen/MenuCenter" method="_on_start_button_pressed"]
 [connection signal="pressed" from="Screen/MenuCenter/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/QuitButton" to="Screen/MenuCenter" method="_on_quit_button_pressed"]
