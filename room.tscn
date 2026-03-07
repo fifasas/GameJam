@@ -4,11 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://bcubu4yfd587k" path="res://killzone.tscn" id="2_bisa2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xal5j"]
-size = Vector2(298.28516, 140.34262)
+size = Vector2(298.28516, 625.1646)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_efgsu"]
 a = Vector2(313.63397, 50.972656)
 b = Vector2(-301.1881, 47.051697)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_bisa2"]
+a = Vector2(154.62126, 19.119736)
+b = Vector2(-170.11057, 17.69289)
 
 [node name="room" type="Node2D" unique_id=314867672]
 scale = Vector2(3.6799598, 3.5042326)
@@ -23,7 +27,7 @@ position = Vector2(-152.17558, -98.45237)
 scale = Vector2(0.2717421, 0.2853692)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=513913216]
-position = Vector2(220, 313)
+position = Vector2(220, 184.08566)
 shape = SubResource("RectangleShape2D_xal5j")
 
 [node name="Walls2" type="StaticBody2D" parent="." unique_id=1484572330]
@@ -31,7 +35,8 @@ position = Vector2(0, -13.983093)
 scale = Vector2(0.21834064, 0.21834062)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls2" unique_id=444620238]
-position = Vector2(404.4881, 43.13071)
+position = Vector2(404.488, -70.365944)
+scale = Vector2(0.9999999, 0.99999994)
 shape = SubResource("RectangleShape2D_xal5j")
 
 [node name="Floor" type="StaticBody2D" parent="Walls2" unique_id=1755929005]
@@ -43,3 +48,7 @@ shape = SubResource("SegmentShape2D_efgsu")
 
 [node name="Killzone" parent="." unique_id=1231288392 instance=ExtResource("2_bisa2")]
 position = Vector2(0, 33.102825)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone" unique_id=958735987]
+shape = SubResource("SegmentShape2D_bisa2")
+one_way_collision = true
