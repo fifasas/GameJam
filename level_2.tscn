@@ -10,6 +10,38 @@ b = Vector2(-1211.7428, -42.45871)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xdadj"]
 size = Vector2(286, 1120)
 
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_xdadj"]
+a = Vector2(418, 446)
+b = Vector2(144, 446)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_1y8me"]
+a = Vector2(845, 319)
+b = Vector2(677, 318)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_n7ypv"]
+a = Vector2(1031, 438)
+b = Vector2(970, 421)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_0s5r2"]
+a = Vector2(1409, 314)
+b = Vector2(1601, 317)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_7j8ne"]
+a = Vector2(1267, 357)
+b = Vector2(1187, 358)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_7dov7"]
+a = Vector2(1762, 303)
+b = Vector2(1628, 303)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ehv2h"]
+a = Vector2(630, 296)
+b = Vector2(179, 296)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_15wb7"]
+a = Vector2(2010, 157)
+b = Vector2(1819, 157)
+
 [node name="Level 2" type="Node2D" unique_id=1833892557]
 
 [node name="LongestRoom" type="Sprite2D" parent="." unique_id=640240209]
@@ -24,12 +56,16 @@ collision_layer = 1
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=638808374]
 zoom = Vector2(1.44, 1.44)
+limit_left = 0
+limit_top = 0
+limit_right = 2150
 limit_bottom = 600
 position_smoothing_enabled = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1775749982]
 position = Vector2(1953.9999, 546)
 scale = Vector2(2.096154, 2.0961537)
+collision_layer = 3
 
 [node name="podlaha" type="CollisionShape2D" parent="StaticBody2D" unique_id=584504152]
 light_mask = 7
@@ -47,3 +83,51 @@ shape = SubResource("RectangleShape2D_xdadj")
 position = Vector2(-927.88983, -92.55046)
 scale = Vector2(0.47706422, 0.47706425)
 shape = SubResource("RectangleShape2D_xdadj")
+
+[node name="postel" type="CollisionShape2D" parent="StaticBody2D" unique_id=415797852]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_xdadj")
+one_way_collision = true
+
+[node name="krb" type="CollisionShape2D" parent="StaticBody2D" unique_id=974488039]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_1y8me")
+one_way_collision = true
+
+[node name="gauc" type="CollisionShape2D" parent="StaticBody2D" unique_id=999780395]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_n7ypv")
+one_way_collision = true
+
+[node name="skrinka" type="CollisionShape2D" parent="StaticBody2D" unique_id=1962013584]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_0s5r2")
+one_way_collision = true
+
+[node name="zidle" type="CollisionShape2D" parent="StaticBody2D" unique_id=423959349]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_7j8ne")
+one_way_collision = true
+
+[node name="parapet 2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1325707836]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_7dov7")
+one_way_collision = true
+
+[node name="parapet" type="CollisionShape2D" parent="StaticBody2D" unique_id=266904275]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_ehv2h")
+one_way_collision = true
+
+[node name="skrin" type="CollisionShape2D" parent="StaticBody2D" unique_id=687589586]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_15wb7")
+one_way_collision = true
