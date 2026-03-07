@@ -5,11 +5,17 @@
 [sub_resource type="GDScript" id="GDScript_mouse"]
 script/source = "extends Node2D
 
-const SPEED := 300.0
+const SPEED := 60.0
 const CONTACT_DAMAGE := 10
-const DAMAGE_INTERVAL := 0.0
+const DAMAGE_INTERVAL := 1.0
+const HIT_FLASH_DURATION := 0.3
+const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+
+@export_range(1, 9999, 1) var max_hp: int = 10
+@export_range(0, 9999, 1) var current_hp: int = 10
 
 var direction := 1
+var hit_flash_id := 0
 var tracked_body: Node2D = null
 var tracked_damage_target: Node = null
 
@@ -17,6 +23,9 @@ var tracked_damage_target: Node = null
 @onready var ray_castleft: RayCast2D = $RayCastleft
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var damage_timer: Timer = $DamageTimer
+
+func _ready() -> void:
+	current_hp = clamp(current_hp, 0, max_hp)
 
 func _process(delta: float) -> void:
 	if ray_castright.is_colliding():
@@ -61,9 +70,20 @@ func _on_damage_timer_timeout() -> void:
 	_apply_contact_damage()
 
 func _is_player_body(body: Node2D) -> bool:
+	if body.is_in_group(\"player\"):
+		return true
 	if body.name == \"CharacterBody2D\":
 		return true
 	return body.get_parent() != null and body.get_parent().name == \"player\"
+
+func take_damage(amount: int) -> void:
+	if amount <= 0 or current_hp <= 0:
+		return
+
+	current_hp = max(current_hp - amount, 0)
+	_flash_hit()
+	if current_hp == 0:
+		queue_free()
 
 func _apply_contact_damage() -> void:
 	if tracked_damage_target.has_method(\"damage\"):
@@ -94,6 +114,18 @@ func _find_damage_target(body: Node2D) -> Node:
 	if healthbar == null:
 		healthbar = current_scene.find_child(\"healthbar\", true, false)
 	return healthbar
+
+func _flash_hit() -> void:
+	hit_flash_id += 1
+	var flash_id := hit_flash_id
+	animated_sprite_2d.modulate = HIT_FLASH_COLOR
+	_reset_flash_after_delay(flash_id)
+
+func _reset_flash_after_delay(flash_id: int) -> void:
+	await get_tree().create_timer(HIT_FLASH_DURATION).timeout
+	if flash_id != hit_flash_id or not is_instance_valid(animated_sprite_2d):
+		return
+	animated_sprite_2d.modulate = Color(1.0, 1.0, 1.0, 1.0)
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4gyqm"]
@@ -143,7 +175,7 @@ animations = [{
 radius = 20.0
 height = 94.0
 
-[node name="mouse" type="Node2D" unique_id=237143598]
+[node name="mouse" type="Node2D" unique_id=237143598 groups=["enemy"]]
 script = SubResource("GDScript_mouse")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1091228300]
@@ -153,6 +185,7 @@ frame = 3
 frame_progress = 0.006296981
 
 [node name="DamageArea" type="Area2D" parent="." unique_id=1231288392]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=317928200]
 position = Vector2(1, 28)
@@ -160,6 +193,7 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_qi2p4")
 
 [node name="DamageTimer" type="Timer" parent="." unique_id=1156119116]
+wait_time = 1.0
 
 [node name="RayCastright" type="RayCast2D" parent="." unique_id=1009754148]
 position = Vector2(14, 28)
