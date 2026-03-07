@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://d3m6c4je48grl"]
+[gd_scene format=3 uid="uid://c5xdx1fqfpw1d"]
 
-[ext_resource type="Script" uid="uid://cbpkbybx8nlt4" path="res://scripts/mouse.gd" id="1_1jbr0"]
+[ext_resource type="Script" path="res://scripts/mouse.gd" id="1_1jbr0"]
 [ext_resource type="Texture2D" uid="uid://c5xftgnx3bvmt" path="res://assets/msprite final.png" id="1_7k104"]
 [ext_resource type="PackedScene" uid="uid://bcubu4yfd587k" path="res://killzone.tscn" id="2_4gyqm"]
 
