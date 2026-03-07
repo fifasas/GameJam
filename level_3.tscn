@@ -1,15 +1,19 @@
-[gd_scene format=3 uid="uid://t8a15jscynyt"]
+[gd_scene format=3 uid="uid://dvvko6ij0m4iv"]
 
-[ext_resource type="Texture2D" uid="uid://djmx8r5qx2os7" path="res://assets/backgrounds/Wolf_battle_background.png" id="1_1fhj5"]
+[ext_resource type="Texture2D" uid="uid://dor378g4rxj4" path="res://assets/backgrounds/Background_forest.png" id="1_16pka"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_16pka"]
 [ext_resource type="Texture2D" uid="uid://c44yerhsar2cj" path="res://assets/animations/wolfsheet1.png" id="3_16pka"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
-size = Vector2(786.98987, 2274.5251)
+size = Vector2(1428.0261, 2477.6357)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_1jdk1"]
-a = Vector2(1396.8357, 650.6666)
-b = Vector2(-1110.921, 640.256)
+a = Vector2(3858.7588, 1543.3813)
+b = Vector2(259.72412, 1564.2025)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_16pka"]
+a = Vector2(3816, 926)
+b = Vector2(2064, 930)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j8bo8"]
 atlas = ExtResource("3_16pka")
@@ -159,34 +163,46 @@ animations = [{
 
 [node name="Node2D" type="Node2D" parent="." unique_id=902534777]
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1921680864]
-position = Vector2(544.61346, 358.875)
-scale = Vector2(0.5032477, 0.36667523)
-texture = ExtResource("1_1fhj5")
+[node name="BackgroundForest" type="Sprite2D" parent="." unique_id=2008097049]
+position = Vector2(1955, 541)
+texture = ExtResource("1_16pka")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2087665207]
 position = Vector2(491, 344.99997)
 scale = Vector2(0.4581784, 0.38422135)
 
 [node name="Les_stena_1" type="CollisionShape2D" parent="StaticBody2D" unique_id=181286562]
-position = Vector2(1680.5681, -187.39186)
+position = Vector2(7966.329, 275.88278)
 shape = SubResource("RectangleShape2D_j8bo8")
 
 [node name="Les_stena_2" type="CollisionShape2D" parent="StaticBody2D" unique_id=739779779]
-position = Vector2(-1462.3125, -169.1732)
+position = Vector2(-388.495, 325.3334)
 shape = SubResource("RectangleShape2D_j8bo8")
 
 [node name="Les_podlaha" type="CollisionShape2D" parent="StaticBody2D" unique_id=82780556]
-position = Vector2(15.277893, -2.6026)
+position = Vector2(-1185.1279, -7.807933)
 shape = SubResource("SegmentShape2D_1jdk1")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1372165533]
+position = Vector2(-1071.635, -897.9198)
+scale = Vector2(2.182556, 2.6026664)
+shape = SubResource("SegmentShape2D_16pka")
+
 [node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("2_16pka")]
-position = Vector2(566, 547)
-scale = Vector2(2, 2)
+position = Vector2(3726, 853)
+scale = Vector2(4, 4)
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=823001870]
+position = Vector2(1, 2.75)
+scale = Vector2(0.25, 0.25)
+zoom = Vector2(0.8, 0.8)
+position_smoothing_enabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=529984956]
-position = Vector2(137.25, 547.875)
-scale = Vector2(3.1484375, 3.2177424)
+position = Vector2(1016.86725, 827.2732)
+scale = Vector2(6.479977, 6.622618)
 sprite_frames = SubResource("SpriteFrames_4hpui")
-animation = &"Attack"
-frame_progress = 0.928341
+animation = &"Walking_right"
+frame_progress = 0.9058543
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1281624546]

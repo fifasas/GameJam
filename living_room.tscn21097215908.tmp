@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://cs0gm1b1qqa85"]
+
+[ext_resource type="PackedScene" uid="uid://c1847y5pep6gg" path="res://room.tscn" id="1_efgsu"]
+[ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_efgsu"]
+[ext_resource type="AudioStream" uid="uid://cx5ufqpojujip" path="res://assets/brackeys_platformer_assets/music/time_for_adventure.mp3" id="4_bxp2c"]
+[ext_resource type="PackedScene" uid="uid://dssxlaeju5our" path="res://myslivingroom.tscn" id="4_jeppt"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_378y4"]
+a = Vector2(713.3333, 312.5)
+b = Vector2(769.1666, 312.5)
+
+[node name="LivingRoom" type="Node2D" unique_id=1583328751]
+scale = Vector2(1.2, 1.2)
+
+[node name="room" parent="." unique_id=314867672 instance=ExtResource("1_efgsu")]
+position = Vector2(560, 345)
+
+[node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("2_efgsu")]
+position = Vector2(561, 337)
+scale = Vector2(2, 2)
+collision_mask = 5
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=266454801]
+position = Vector2(-0.5, 4)
+scale = Vector2(1.8399799, 1.7521163)
+zoom = Vector2(2.06, 2.06)
+limit_left = -9999909
+limit_top = -9999498
+limit_right = 10000091
+limit_bottom = 579
+position_smoothing_enabled = true
+position_smoothing_speed = 3.015
+
+[node name="music" type="AudioStreamPlayer2D" parent="." unique_id=415120247]
+stream = ExtResource("4_bxp2c")
+volume_db = 1.458
+autoplay = true
+bus = &"bg music"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1924035617]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=544663850]
+position = Vector2(-2.5, -4.1666665)
+shape = SubResource("SegmentShape2D_378y4")
+
+[node name="Myslivingroom" parent="." unique_id=343200040 instance=ExtResource("4_jeppt")]
+position = Vector2(370.8333, 254.16664)
+scale = Vector2(0.19, 0.19)

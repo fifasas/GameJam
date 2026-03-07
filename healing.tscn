@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bfybwafhgspqa"]
+
+[ext_resource type="Script" uid="uid://c3ppat3mf12y" path="res://scripts/healing.gd" id="1_1hpxd"]
+[ext_resource type="Texture2D" uid="uid://dskj0d3e2p0op" path="res://assets/fish_green1_1.png" id="2_dtd52"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1hpxd"]
+radius = 18.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7o3c"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dyo8"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_po5ih"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(40, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vylk"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(60, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w32g8"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(80, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvkm5"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(100, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6tkco"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(120, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_25nib"]
+atlas = ExtResource("2_dtd52")
+region = Rect2(140, 0, 20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2u4u0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7o3c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dyo8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_po5ih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1vylk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w32g8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvkm5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6tkco")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_25nib")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="mliko" type="Area2D" unique_id=1774917523]
+script = ExtResource("1_1hpxd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=482432940]
+position = Vector2(17, 15)
+shape = SubResource("CircleShape2D_1hpxd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=596351221]
+position = Vector2(17, 14)
+scale = Vector2(1.7, 1.7)
+sprite_frames = SubResource("SpriteFrames_2u4u0")
+autoplay = "default"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
