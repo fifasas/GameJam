@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c1847y5pep6gg"]
 
 [ext_resource type="Texture2D" uid="uid://ckjoldff8l06r" path="res://assets/roomy.png" id="1_88gup"]
+[ext_resource type="PackedScene" uid="uid://bcubu4yfd587k" path="res://killzone.tscn" id="2_bisa2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xal5j"]
 size = Vector2(298.28516, 140.34262)
@@ -22,7 +23,7 @@ position = Vector2(-152.17558, -98.45237)
 scale = Vector2(0.2717421, 0.2853692)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=513913216]
-position = Vector2(232, 309)
+position = Vector2(220, 313)
 shape = SubResource("RectangleShape2D_xal5j")
 
 [node name="Walls2" type="StaticBody2D" parent="." unique_id=1484572330]
@@ -30,7 +31,7 @@ position = Vector2(0, -13.983093)
 scale = Vector2(0.21834064, 0.21834062)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls2" unique_id=444620238]
-position = Vector2(374.61826, 40.516727)
+position = Vector2(404.4881, 43.13071)
 shape = SubResource("RectangleShape2D_xal5j")
 
 [node name="Floor" type="StaticBody2D" parent="Walls2" unique_id=1755929005]
@@ -39,3 +40,6 @@ scale = Vector2(0.9999999, 0.99999994)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls2/Floor" unique_id=1350152889]
 position = Vector2(12.445789, 67.96354)
 shape = SubResource("SegmentShape2D_efgsu")
+
+[node name="Killzone" parent="." unique_id=1231288392 instance=ExtResource("2_bisa2")]
+position = Vector2(0, 33.102825)

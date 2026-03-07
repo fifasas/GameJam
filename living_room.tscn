@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c1847y5pep6gg" path="res://room.tscn" id="1_efgsu"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_efgsu"]
+[ext_resource type="PackedScene" uid="uid://d3m6c4je48grl" path="res://mouse.tscn" id="3_378y4"]
 
 [node name="LivingRoom" type="Node2D" unique_id=1583328751]
 
@@ -18,3 +19,7 @@ scale = Vector2(1.8399799, 1.7521163)
 zoom = Vector2(2.06, 2.06)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.015
+
+[node name="Enemy" parent="." unique_id=237143598 instance=ExtResource("3_378y4")]
+position = Vector2(414.00003, 358)
+scale = Vector2(0.49, 0.49)
