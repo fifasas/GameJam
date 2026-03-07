@@ -18,6 +18,10 @@ scale = Vector2(2, 2)
 position = Vector2(-0.5, 4)
 scale = Vector2(1.8399799, 1.7521163)
 zoom = Vector2(2.06, 2.06)
+limit_left = -9999909
+limit_top = -9999498
+limit_right = 10000091
+limit_bottom = 579
 position_smoothing_enabled = true
 position_smoothing_speed = 3.015
 
