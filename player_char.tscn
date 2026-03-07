@@ -16,6 +16,8 @@ const ATTACK_DAMAGE := 5
 const ATTACK_COOLDOWN := 0.35
 const DROP_THROUGH_LAYER := 2
 const DROP_THROUGH_DURATION := 0.2
+const HIT_FLASH_DURATION := 0.2
+const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
 
 @export_range(1, 9999, 1) var max_hp: int = 100
 @export_range(0, 9999, 1) var current_hp: int = 100
@@ -25,6 +27,7 @@ var is_attacking := false
 var is_dropping_through := false
 var is_sprinting := false
 var healthbar: Node = null
+var hit_flash_id := 0
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
@@ -73,7 +76,10 @@ func damage(amount: int) -> void:
 	if amount <= 0 or current_hp <= 0:
 		return
 
+	var previous_hp := current_hp
 	current_hp = max(current_hp - amount, 0)
+	if current_hp < previous_hp:
+		_flash_hit()
 	_sync_healthbar()
 	if current_hp == 0:
 		get_tree().reload_current_scene()
@@ -86,7 +92,10 @@ func heal(amount: int) -> void:
 	_sync_healthbar()
 
 func set_health(new_health: int) -> void:
+	var previous_hp := current_hp
 	current_hp = clamp(new_health, 0, max_hp)
+	if current_hp < previous_hp:
+		_flash_hit()
 	_sync_healthbar()
 	if current_hp == 0:
 		get_tree().reload_current_scene()
@@ -186,6 +195,18 @@ func _sync_healthbar() -> void:
 		_setup_healthbar()
 	if healthbar != null and healthbar.has_method(\"set_health\"):
 		healthbar.set_health(current_hp)
+
+func _flash_hit() -> void:
+	hit_flash_id += 1
+	var flash_id := hit_flash_id
+	animated_sprite_2d.modulate = HIT_FLASH_COLOR
+	_reset_flash_after_delay(flash_id)
+
+func _reset_flash_after_delay(flash_id: int) -> void:
+	await get_tree().create_timer(HIT_FLASH_DURATION).timeout
+	if flash_id != hit_flash_id or not is_instance_valid(animated_sprite_2d):
+		return
+	animated_sprite_2d.modulate = Color(1.0, 1.0, 1.0, 1.0)
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvl01"]
