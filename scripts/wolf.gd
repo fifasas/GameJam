@@ -28,8 +28,8 @@ enum State {
 
 var gravity := 0.0
 var spawn_x := 0.0
-var patrol_direction := -1
-var facing_direction := -1
+var patrol_direction := 1
+var facing_direction := 1
 var state := State.WALK
 var hit_flash_id := 0
 var player_spotted := false
