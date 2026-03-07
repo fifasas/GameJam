@@ -98,7 +98,7 @@ func _handle_player_tracking(player_target: CharacterBody2D) -> void:
 		return
 
 	player_spotted = true
-	var vertical_distance := abs(player_target.global_position.y - global_position.y)
+	var vertical_distance = abs(player_target.global_position.y - global_position.y)
 	if abs(delta_x) <= ATTACK_RANGE and vertical_distance <= MAX_VERTICAL_TRACKING:
 		if attack_cooldown_timer.is_stopped():
 			_start_attack()
