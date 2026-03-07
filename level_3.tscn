@@ -3,17 +3,28 @@
 [ext_resource type="Texture2D" uid="uid://dor378g4rxj4" path="res://assets/backgrounds/Background_forest.png" id="1_16pka"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_16pka"]
 [ext_resource type="PackedScene" uid="uid://lnr658yg8ovj" path="res://Wolf.tscn" id="3_d8m5v"]
+[ext_resource type="Script" uid="uid://bksme736205ho" path="res://scripts/log_bridge.gd" id="4_m3kpu"]
+[ext_resource type="Texture2D" uid="uid://cucktbpvrfh8x" path="res://assets/log.png" id="5_6j7h5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
 size = Vector2(1428.0261, 2477.6357)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_1jdk1"]
-a = Vector2(3858.7588, 1543.3813)
+a = Vector2(3880.5845, 1543.3813)
 b = Vector2(259.72412, 1564.2025)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_16pka"]
 a = Vector2(3816, 926)
-b = Vector2(1713, 936)
+b = Vector2(2015, 933)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n2p48"]
+size = Vector2(250, 48)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1jdk1"]
+height = 310.67334
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wj7gw"]
+size = Vector2(220, 80)
 
 [node name="Level3" type="Node2D" unique_id=1608437808]
 
@@ -56,5 +67,35 @@ position_smoothing_enabled = true
 
 [node name="Wolf" parent="." unique_id=2096052260 instance=ExtResource("3_d8m5v")]
 position = Vector2(1016.86725, 930)
+
+[node name="Log" type="Node2D" parent="." unique_id=929019998]
+position = Vector2(1974, 835)
+rotation = 1.4405601
+script = ExtResource("4_m3kpu")
+standing_rotation_degrees = 82.5
+fallen_offset = Vector2(-105, 123)
+
+[node name="Sprite2D" type="Sprite2D" parent="Log" unique_id=573810078]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("5_6j7h5")
+
+[node name="StandingBody" type="StaticBody2D" parent="Log" unique_id=883233768]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Log/StandingBody" unique_id=2058878342]
+shape = SubResource("RectangleShape2D_n2p48")
+
+[node name="BridgeBody" type="StaticBody2D" parent="Log" unique_id=682435009]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Log/BridgeBody" unique_id=178631900]
+position = Vector2(1, -16)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_1jdk1")
+disabled = true
+
+[node name="HitArea" type="Area2D" parent="Log" unique_id=853605767]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Log/HitArea" unique_id=118089385]
+position = Vector2(-2.1253097, 23.926619)
+shape = SubResource("RectangleShape2D_wj7gw")
 
 [node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1281624546]
