@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cs0gm1b1qqa85"]
 
 [ext_resource type="PackedScene" uid="uid://c1847y5pep6gg" path="res://room.tscn" id="1_efgsu"]
-[ext_resource type="Script" uid="uid://c7vejm4doinsi" path="res://scripts/living_room.gd" id="1_living"]
+[ext_resource type="Script" path="res://scripts/living_room.gd" id="1_living"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_efgsu"]
-[ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="3_ingame"]
+[ext_resource type="PackedScene" path="res://Ingame menu.tscn" id="3_ingame"]
 [ext_resource type="AudioStream" uid="uid://cx5ufqpojujip" path="res://assets/brackeys_platformer_assets/music/time_for_adventure.mp3" id="4_bxp2c"]
-[ext_resource type="PackedScene" path="res://myslivingroom.tscn" id="4_jeppt"]
+[ext_resource type="PackedScene" uid="uid://dssxlaeju5our" path="res://myslivingroom.tscn" id="4_jeppt"]
 [ext_resource type="Texture2D" uid="uid://b7rg3xevkooc" path="res://assets/klubko.png" id="6_w7u4w"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_prompt"]

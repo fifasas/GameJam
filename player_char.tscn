@@ -514,7 +514,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
-size = Vector2(29, 25)
+size = Vector2(33, 30)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=274477576 groups=["player"]]
 collision_layer = 4
@@ -531,9 +531,11 @@ animation = &"Idle"
 autoplay = "Idle"
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=1640669356]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=540197482]
-position = Vector2(-0.5, 3.5)
+position = Vector2(-0.5, 1)
 shape = SubResource("RectangleShape2D_attack")
 
 [node name="AttackCooldownTimer" type="Timer" parent="." unique_id=1013622247]
