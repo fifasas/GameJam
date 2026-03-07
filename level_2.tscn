@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://b0wd5dh8gvj1a"]
+[gd_scene format=3 uid="uid://dfgu6h1nfaut4"]
 
 [ext_resource type="Texture2D" uid="uid://wi5ur73kye0g" path="res://assets/backgrounds/longest room.jpg" id="1_nmjpi"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_xdadj"]
+[ext_resource type="PackedScene" uid="uid://bfybwafhgspqa" path="res://healing.tscn" id="3_7j8ne"]
 [ext_resource type="PackedScene" uid="uid://cevx03ll33d0c" path="res://yarnboss.tscn" id="3_xdadj"]
-[ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="4_hk1x8"]
+[ext_resource type="PackedScene" path="res://Ingame menu.tscn" id="4_hk1x8"]
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="4_t5a6v"]
 [ext_resource type="Texture2D" uid="uid://qcmljy1av1t5" path="res://assets/animations/arrow_sheet.png" id="7_7j8ne"]
 
@@ -498,6 +499,12 @@ position = Vector2(-932.1834, -260.47708)
 scale = Vector2(0.47706422, 0.47706425)
 shape = SubResource("SegmentShape2D_15wb7")
 one_way_collision = true
+
+[node name="ryba" parent="StaticBody2D" unique_id=1774917523 instance=ExtResource("3_7j8ne")]
+position = Vector2(-31.009125, -32.44036)
+
+[node name="ryba2" parent="StaticBody2D" unique_id=7835955 instance=ExtResource("3_7j8ne")]
+position = Vector2(-805.5, -33.541)
 
 [node name="yarnboss" parent="." unique_id=566931756 instance=ExtResource("3_xdadj")]
 position = Vector2(1042, 241)
