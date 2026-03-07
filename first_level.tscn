@@ -1,41 +1,181 @@
 [gd_scene format=3 uid="uid://bcx4gmoh8bbl4"]
 
-[ext_resource type="Texture2D" uid="uid://dxb0yo2kul3pp" path="res://assets/brackeys_platformer_assets/sprites/platforms.png" id="1_fnyhn"]
-[ext_resource type="PackedScene" uid="uid://bpgctqjjg1go4" path="res://player.tscn" id="2_7m365"]
+[ext_resource type="Texture2D" uid="uid://x5fijpb32vrq" path="res://assets/backgrounds/background_first_level.png" id="1_fnyhn"]
+[ext_resource type="PackedScene" uid="uid://bpgctqjjg1go4" path="res://player.tscn" id="1_player"]
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_j4ciw"]
-a = Vector2(0, 512)
-b = Vector2(1152, 512)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title_card"]
+bg_color = Color(0.0705882, 0.0941176, 0.141176, 0.82)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.498039, 0.768627, 0.717647, 0.9)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.28)
+shadow_size = 8
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5nl2g"]
-texture = ExtResource("1_fnyhn")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
+[sub_resource type="LabelSettings" id="LabelSettings_kicker"]
+font_color = Color(0.909804, 0.74902, 0.462745, 1)
+outline_size = 4
+outline_color = Color(0.101961, 0.0705882, 0.0666667, 0.92)
 
-[sub_resource type="TileSet" id="TileSet_mne6x"]
-sources/0 = SubResource("TileSetAtlasSource_5nl2g")
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 26
+font_color = Color(0.972549, 0.94902, 0.870588, 1)
+outline_size = 6
+outline_color = Color(0.109804, 0.0784314, 0.0627451, 0.94)
+
+[sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
+font_size = 15
+font_color = Color(0.831373, 0.937255, 0.933333, 1)
+outline_size = 4
+outline_color = Color(0.0823529, 0.0627451, 0.0588235, 0.92)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint_card"]
+bg_color = Color(0.0901961, 0.117647, 0.172549, 0.76)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.905882, 0.741176, 0.470588, 0.88)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_hint"]
+font_size = 15
+font_color = Color(0.968627, 0.909804, 0.760784, 1)
+outline_size = 4
+outline_color = Color(0.0941176, 0.0666667, 0.054902, 0.92)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_7m365"]
+a = Vector2(36, 597)
+b = Vector2(35, 1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_5nl2g"]
+a = Vector2(1145, 0)
+b = Vector2(1150, 596)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_fnyhn"]
+a = Vector2(1158, 596)
+b = Vector2(35, 596)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_mne6x"]
+a = Vector2(241, 392)
+b = Vector2(414, 395)
 
 [node name="FirstLevel" type="Node2D" unique_id=1172531662]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1294189014]
+[node name="Background" type="Node2D" parent="." unique_id=221754639]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=184127107]
-shape = SubResource("SegmentShape2D_j4ciw")
+[node name="BackgroundFirstLevel" type="Sprite2D" parent="Background" unique_id=684557704]
+position = Vector2(578, 324.00003)
+scale = Vector2(0.42154944, 0.42154956)
+texture = ExtResource("1_fnyhn")
 
-[node name="player" parent="." unique_id=1297489525 instance=ExtResource("2_7m365")]
-position = Vector2(71, 480)
+[node name="player" parent="." unique_id=1297489525 instance=ExtResource("1_player")]
+position = Vector2(184, 543)
+scale = Vector2(3, 3)
 
-[node name="TileMap" type="TileMap" parent="." unique_id=88763356]
-tile_set = SubResource("TileSet_mne6x")
-format = 2
-layer_0/tile_data = PackedInt32Array(2097152, 0, 0, 2097153, 0, 0, 2097154, 0, 0, 2097155, 0, 0, 2097156, 0, 0, 2097157, 0, 0, 2097158, 0, 0, 2097159, 0, 0, 2097160, 0, 0, 2097161, 0, 0, 2097162, 0, 0, 2097163, 0, 0, 2097164, 0, 0, 2097165, 0, 0, 2097166, 0, 0, 2097167, 0, 0, 2097168, 0, 0, 2097169, 0, 0, 2097170, 0, 0, 2097171, 0, 0, 2097172, 0, 0, 2097173, 0, 0, 2097174, 0, 0, 2097175, 0, 0, 2097176, 0, 0, 2097177, 0, 0, 2097178, 0, 0, 2097179, 0, 0, 2097180, 0, 0, 2097181, 0, 0, 2097182, 0, 0, 2097183, 0, 0, 2097184, 0, 0, 2097185, 0, 0, 2097186, 0, 0, 2097187, 0, 0, 2097188, 0, 0, 2097189, 0, 0, 2097190, 0, 0, 2097191, 0, 0, 2097192, 0, 0, 2097193, 0, 0, 2097194, 0, 0, 2097195, 0, 0, 2097196, 0, 0, 2097197, 0, 0, 2097198, 0, 0, 2097199, 0, 0, 2097200, 0, 0, 2097201, 0, 0, 2097202, 0, 0, 2097203, 0, 0, 2097204, 0, 0, 2097205, 0, 0, 2097206, 0, 0, 2097207, 0, 0, 2097208, 0, 0, 2097209, 0, 0, 2097210, 0, 0, 2097211, 0, 0, 2097212, 0, 0, 2097213, 0, 0, 2097214, 0, 0, 2097215, 0, 0, 2097216, 0, 0, 2097217, 0, 0, 2097218, 0, 0, 2097219, 0, 0, 2097220, 0, 0, 2097221, 0, 0, 2097222, 0, 0, 2097223, 0, 0)
+[node name="HUD" type="CanvasLayer" parent="." unique_id=291792246]
+
+[node name="Screen" type="Control" parent="HUD" unique_id=1680120868]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="HUD/Screen" unique_id=449125575]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 655.0
+offset_top = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="HudStack" type="VBoxContainer" parent="HUD/Screen/Margin" unique_id=792147929]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleCard" type="PanelContainer" parent="HUD/Screen/Margin/HudStack" unique_id=1251440301]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_title_card")
+
+[node name="TitlePadding" type="MarginContainer" parent="HUD/Screen/Margin/HudStack/TitleCard" unique_id=932099696]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="TitleContent" type="VBoxContainer" parent="HUD/Screen/Margin/HudStack/TitleCard/TitlePadding" unique_id=1031303918]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Kicker" type="Label" parent="HUD/Screen/Margin/HudStack/TitleCard/TitlePadding/TitleContent" unique_id=1358421136]
+layout_mode = 2
+text = "First Level"
+label_settings = SubResource("LabelSettings_kicker")
+
+[node name="Title" type="Label" parent="HUD/Screen/Margin/HudStack/TitleCard/TitlePadding/TitleContent" unique_id=225869788]
+layout_mode = 2
+text = "The Mouse"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="Subtitle" type="Label" parent="HUD/Screen/Margin/HudStack/TitleCard/TitlePadding/TitleContent" unique_id=36095511]
+layout_mode = 2
+text = "Be careful, it might bite you!"
+label_settings = SubResource("LabelSettings_subtitle")
+
+[node name="HintCard" type="PanelContainer" parent="HUD/Screen/Margin/HudStack" unique_id=1354123670]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hint_card")
+
+[node name="HintPadding" type="MarginContainer" parent="HUD/Screen/Margin/HudStack/HintCard" unique_id=659600745]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="Hint" type="Label" parent="HUD/Screen/Margin/HudStack/HintCard/HintPadding" unique_id=1066844829]
+layout_mode = 2
+text = "Use W, S, A, D or Arrows for movement
+To JUMP use Space or W
+Use LMB for attack
+Use RMB to block"
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="Collision parts" type="StaticBody2D" parent="." unique_id=861867002]
+
+[node name="Walls" type="StaticBody2D" parent="Collision parts" unique_id=518844209]
+
+[node name="Left Wall" type="CollisionShape2D" parent="Collision parts/Walls" unique_id=1167069081]
+position = Vector2(-3, 3)
+shape = SubResource("SegmentShape2D_7m365")
+
+[node name="Right Wall" type="CollisionShape2D" parent="Collision parts/Walls" unique_id=1721578184]
+shape = SubResource("SegmentShape2D_5nl2g")
+
+[node name="Floor" type="StaticBody2D" parent="Collision parts" unique_id=1753144781]
+
+[node name="Floor" type="CollisionShape2D" parent="Collision parts/Floor" unique_id=179782806]
+shape = SubResource("SegmentShape2D_fnyhn")
+
+[node name="Table" type="CollisionShape2D" parent="Collision parts" unique_id=733709468]
+shape = SubResource("SegmentShape2D_mne6x")

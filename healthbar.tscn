@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://cphdsvkc1femx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_background"]
+bg_color = Color(0.14902, 0.133333, 0.156863, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.309804, 0.294118, 0.34902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
+bg_color = Color(0.397022, 0.674773, 0.455488, 1)
+
+[sub_resource type="GDScript" id="GDScript_healthbar"]
+script/source = "extends ProgressBar
+
+signal health_changed(current_hp: int, max_hp: int)
+signal health_depleted
+
+@export_range(1, 9999, 1) var max_hp: int = 100
+@export_range(0, 9999, 1) var current_hp: int = 100
+
+func _ready() -> void:
+	_apply_limits()
+	current_hp = clamp(current_hp, 0, max_hp)
+	_update_bar()
+
+func setup(new_max_hp: int = 100, new_current_hp: int = -1) -> void:
+	max_hp = max(1, new_max_hp)
+	current_hp = max_hp if new_current_hp < 0 else clamp(new_current_hp, 0, max_hp)
+	_apply_limits()
+	_update_bar()
+
+func set_health(new_health: int) -> void:
+	current_hp = clamp(new_health, 0, max_hp)
+	_update_bar()
+
+func damage(amount: int) -> void:
+	if amount <= 0:
+		return
+	set_health(current_hp - amount)
+
+func heal(amount: int) -> void:
+	if amount <= 0:
+		return
+	set_health(current_hp + amount)
+
+func set_max_health(new_max_hp: int, refill: bool = false) -> void:
+	max_hp = max(1, new_max_hp)
+	current_hp = max_hp if refill else clamp(current_hp, 0, max_hp)
+	_apply_limits()
+	_update_bar()
+
+func reset_health() -> void:
+	current_hp = max_hp
+	_update_bar()
+
+func is_dead() -> bool:
+	return current_hp <= 0
+
+func _apply_limits() -> void:
+	min_value = 0.0
+	max_value = float(max_hp)
+	step = 1.0
+
+func _update_bar() -> void:
+	value = float(current_hp)
+	tooltip_text = \"%d / %d HP\" % [current_hp, max_hp]
+	health_changed.emit(current_hp, max_hp)
+	if current_hp == 0:
+		health_depleted.emit()
+"
+
+[node name="Healthbar" type="ProgressBar" unique_id=1516787767]
+visibility_layer = 512
+z_index = 1
+offset_left = 1.0
+offset_right = 191.0
+offset_bottom = 13.0
+tooltip_text = "100 / 100 HP"
+theme_override_styles/background = SubResource("StyleBoxFlat_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
+value = 100.0
+show_percentage = false
+script = SubResource("GDScript_healthbar")
