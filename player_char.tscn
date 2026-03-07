@@ -6,12 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://x1wo7mm1ec25" path="res://assets/FREE_Cat 2D Pixel Art/Sprites/RUN.png" id="4_rqctn"]
 [ext_resource type="Texture2D" uid="uid://drr0yhleukwg1" path="res://assets/FREE_Cat 2D Pixel Art/Sprites/WALK.png" id="5_rqctn"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nvl01"]
-size = Vector2(26, 25)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
-size = Vector2(22, 18)
-
 [sub_resource type="GDScript" id="GDScript_player_char"]
 script/source = "extends CharacterBody2D
 
@@ -168,6 +162,9 @@ func _sync_healthbar() -> void:
 	if healthbar != null and healthbar.has_method(\"set_health\"):
 		healthbar.set_health(current_hp)
 "
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nvl01"]
+size = Vector2(26, 25)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rqctn"]
 atlas = ExtResource("2_so28d")
@@ -470,6 +467,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(29, 25)
+
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=274477576 groups=["player"]]
 collision_layer = 4
 collision_mask = 5
@@ -484,13 +484,13 @@ sprite_frames = SubResource("SpriteFrames_n7ghd")
 animation = &"Idle"
 autoplay = "Idle"
 
-[node name="AttackArea" type="Area2D" parent="."]
-collision_mask = 1
+[node name="AttackArea" type="Area2D" parent="." unique_id=1640669356]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=540197482]
+position = Vector2(-0.5, 3.5)
 shape = SubResource("RectangleShape2D_attack")
 
-[node name="AttackCooldownTimer" type="Timer" parent="."]
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=1013622247]
 one_shot = true
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

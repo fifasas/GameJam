@@ -4,55 +4,46 @@
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_xdadj"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_nmjpi"]
-a = Vector2(-1071.0092, 81.578)
-b = Vector2(929.7982, 78.238556)
+a = Vector2(1458.385, -25.284393)
+b = Vector2(-1211.7428, -42.45871)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xdadj"]
 size = Vector2(286, 1120)
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_1y8me"]
-a = Vector2(77, 601)
-b = Vector2(-231, 592)
-
 [node name="Level 2" type="Node2D" unique_id=1833892557]
 
 [node name="LongestRoom" type="Sprite2D" parent="." unique_id=640240209]
-position = Vector2(1953.9999, 546)
-scale = Vector2(2.096154, 2.0961537)
+position = Vector2(1084.7305, 303.5)
+scale = Vector2(1.1634616, 1.1634614)
 texture = ExtResource("1_nmjpi")
 
-[node name="podlaha" type="CollisionShape2D" parent="LongestRoom" unique_id=584504152]
-light_mask = 7
-visibility_layer = 7
-position = Vector2(21.467949, 147.41286)
-shape = SubResource("SegmentShape2D_nmjpi")
-
 [node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("2_xdadj")]
-position = Vector2(2272, 439.00006)
-scale = Vector2(7.51, 7.51)
+position = Vector2(1201.0001, 336)
+scale = Vector2(3.655, 3.655)
+collision_layer = 1
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1799332322]
-zoom = Vector2(0.775, 0.775)
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=638808374]
+zoom = Vector2(1.44, 1.44)
+limit_bottom = 600
 position_smoothing_enabled = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1316014882]
-position = Vector2(133, 550)
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1775749982]
+position = Vector2(1953.9999, 546)
+scale = Vector2(2.096154, 2.0961537)
+
+[node name="podlaha" type="CollisionShape2D" parent="StaticBody2D" unique_id=584504152]
+light_mask = 7
+visibility_layer = 7
+position = Vector2(-256.18344, 41.504562)
+scale = Vector2(1.0000002, 1)
+shape = SubResource("SegmentShape2D_nmjpi")
+
+[node name="zed2" type="CollisionShape2D" parent="StaticBody2D" unique_id=545229500]
+position = Vector2(130.71564, -142.16515)
+scale = Vector2(0.47706422, 0.47706425)
 shape = SubResource("RectangleShape2D_xdadj")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=545229500]
-position = Vector2(3856, 528)
+[node name="zed3" type="CollisionShape2D" parent="StaticBody2D" unique_id=1316014882]
+position = Vector2(-927.88983, -92.55046)
+scale = Vector2(0.47706422, 0.47706425)
 shape = SubResource("RectangleShape2D_xdadj")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="." unique_id=1532301070]
-shape = SubResource("SegmentShape2D_1y8me")
-one_way_collision = true
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="." unique_id=451255506]
-position = Vector2(1447, -18)
-shape = SubResource("SegmentShape2D_1y8me")
-one_way_collision = true
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="." unique_id=1927616863]
-position = Vector2(1447, -18)
-shape = SubResource("SegmentShape2D_1y8me")
-one_way_collision = true
