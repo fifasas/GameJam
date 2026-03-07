@@ -398,7 +398,7 @@ region = Rect2(192, 0, 32, 32)
 [sub_resource type="SpriteFrames" id="SpriteFrames_lyyg7"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 0.4,
 "texture": SubResource("AtlasTexture_kma2q")
 }, {
 "duration": 1.0,
@@ -586,16 +586,22 @@ horizontal_alignment = 1
 position = Vector2(-559.00006, 223)
 scale = Vector2(4.125, 4.125)
 sprite_frames = SubResource("SpriteFrames_depc5")
+autoplay = "default"
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=1142089104]
 position = Vector2(-403, 212.99997)
 scale = Vector2(4.8515635, 4.8515635)
 sprite_frames = SubResource("SpriteFrames_0wui6")
+autoplay = "default"
+speed_scale = 1.5
 
 [node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="." unique_id=1687345903]
-position = Vector2(419.25003, 171.74997)
-scale = Vector2(6.921877, 6.921877)
+position = Vector2(475, 198)
+scale = Vector2(-5.692136, 5.9128194)
 sprite_frames = SubResource("SpriteFrames_lyyg7")
+autoplay = "default"
+frame_progress = 0.9456162
+speed_scale = 2.0
 
 [connection signal="timeout" from="Screen/ShowTimer" to="Screen/MenuCenter" method="_on_timer_timeout"]
 [connection signal="pressed" from="Screen/MenuCenter/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/StartButton" to="Screen/MenuCenter" method="_on_start_button_pressed"]

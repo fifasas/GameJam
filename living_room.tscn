@@ -30,6 +30,7 @@ outline_color = Color(0.137255, 0.105882, 0.0862745, 1)
 [node name="LivingRoom" type="Node2D" unique_id=1583328751]
 scale = Vector2(1.2, 1.2)
 script = ExtResource("1_living")
+metadata/_edit_horizontal_guides_ = [-95.0]
 
 [node name="room" parent="." unique_id=314867672 instance=ExtResource("1_efgsu")]
 position = Vector2(560, 345)
@@ -125,6 +126,7 @@ collision_mask = 4
 shape = SubResource("RectangleShape2D_level_zone")
 
 [node name="Marker" type="Polygon2D" parent="Level1Zone" unique_id=1978201200]
+visible = false
 color = Color(0.32549, 0.619608, 0.980392, 0.5)
 polygon = PackedVector2Array(-46, -46, 46, -46, 46, 46, -46, 46)
 
@@ -151,6 +153,7 @@ collision_mask = 4
 shape = SubResource("RectangleShape2D_level_zone")
 
 [node name="Marker" type="Polygon2D" parent="Level2Zone" unique_id=486083299]
+visible = false
 color = Color(0.968627, 0.619608, 0.298039, 0.5)
 polygon = PackedVector2Array(-46, -46, 46, -46, 46, 46, -46, 46)
 
