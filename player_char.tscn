@@ -9,16 +9,21 @@
 [sub_resource type="GDScript" id="GDScript_player_char"]
 script/source = "extends CharacterBody2D
 
-const SPEED := 130.0
+const WALK_SPEED := 130.0
+const SPRINT_SPEED := 220.0
 const JUMP_VELOCITY := -600.0
 const ATTACK_DAMAGE := 5
 const ATTACK_COOLDOWN := 0.35
+const DROP_THROUGH_LAYER := 2
+const DROP_THROUGH_DURATION := 0.2
 
 @export_range(1, 9999, 1) var max_hp: int = 100
 @export_range(0, 9999, 1) var current_hp: int = 100
 
 var facing_direction := 1
 var is_attacking := false
+var is_dropping_through := false
+var is_sprinting := false
 var healthbar: Node = null
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -41,15 +46,18 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	var direction := 0.0
+	is_sprinting = false
 	if not is_attacking:
 		direction = Input.get_axis(\"left\", \"right\")
+		is_sprinting = direction != 0.0 and is_on_floor() and Input.is_key_pressed(KEY_SHIFT)
+		var move_speed := SPRINT_SPEED if is_sprinting else WALK_SPEED
 		if direction != 0.0:
 			facing_direction = 1 if direction > 0.0 else -1
-			velocity.x = direction * SPEED
+			velocity.x = direction * move_speed
 		else:
-			velocity.x = move_toward(velocity.x, 0.0, SPEED)
+			velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED)
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, SPEED)
+		velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED)
 
 	_update_attack_area()
 	_update_animation()
@@ -58,6 +66,8 @@ func _physics_process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		_try_attack()
+	elif event is InputEventKey and event.pressed and not event.echo and _is_drop_input(event):
+		drop_through()
 
 func damage(amount: int) -> void:
 	if amount <= 0 or current_hp <= 0:
@@ -130,7 +140,7 @@ func _update_animation() -> void:
 	if not is_on_floor():
 		animated_sprite_2d.play(\"jump\")
 	elif abs(velocity.x) > 5.0:
-		animated_sprite_2d.play(\"walk\")
+		animated_sprite_2d.play(\"run\" if is_sprinting else \"walk\")
 	else:
 		animated_sprite_2d.play(\"Idle\")
 
@@ -138,6 +148,21 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite_2d.animation == &\"attack\":
 		is_attacking = false
 		_update_animation()
+
+func drop_through() -> void:
+	if is_dropping_through or not is_on_floor():
+		return
+
+	is_dropping_through = true
+	set_collision_mask_value(DROP_THROUGH_LAYER, false)
+	global_position.y += 2.0
+	velocity.y = max(velocity.y, 50.0)
+	await get_tree().create_timer(DROP_THROUGH_DURATION).timeout
+	set_collision_mask_value(DROP_THROUGH_LAYER, true)
+	is_dropping_through = false
+
+func _is_drop_input(event: InputEventKey) -> bool:
+	return event.is_action_pressed(\"ui_down\") or event.physical_keycode == KEY_S or event.keycode == KEY_DOWN
 
 func _find_healthbar() -> Node:
 	var current_scene := get_tree().current_scene
@@ -423,7 +448,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
-"speed": 5.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -472,7 +497,7 @@ size = Vector2(29, 25)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=274477576 groups=["player"]]
 collision_layer = 4
-collision_mask = 5
+collision_mask = 7
 script = SubResource("GDScript_player_char")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=870062258 groups=["player"]]

@@ -72,6 +72,9 @@ b = Vector2(35, 596)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nl2g"]
 size = Vector2(799, 385.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_drop_platform"]
+size = Vector2(220, 14)
+
 [node name="FirstLevel" type="Node2D" unique_id=1172531662]
 
 [node name="Background" type="Node2D" parent="." unique_id=221754639]
@@ -156,7 +159,8 @@ layout_mode = 2
 text = "Use W, S, A, D or Arrows for movement
 To JUMP use Space or W
 Use LMB for attack
-Hit the mouse twice to defeat it"
+Hit the mouse twice to defeat it
+Press S or Down to drop through thin platforms"
 label_settings = SubResource("LabelSettings_hint")
 
 [node name="IngameMenu" parent="HUD/Screen" unique_id=60306681 instance=ExtResource("6_igtk7")]
@@ -185,6 +189,19 @@ shape = SubResource("SegmentShape2D_5nl2g")
 
 [node name="Floor" type="CollisionShape2D" parent="Collision parts/Floor" unique_id=179782806]
 shape = SubResource("SegmentShape2D_fnyhn")
+
+[node name="DropThroughPlatform" type="StaticBody2D" parent="Collision parts"]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision parts/DropThroughPlatform"]
+position = Vector2(372, 468)
+shape = SubResource("RectangleShape2D_drop_platform")
+one_way_collision = true
+
+[node name="DropThroughPlatformVisual" type="Polygon2D" parent="."]
+position = Vector2(372, 468)
+color = Color(0.905882, 0.741176, 0.470588, 0.9)
+polygon = PackedVector2Array(-110, -7, 110, -7, 110, 7, -110, 7)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision parts" unique_id=1566669247]
 position = Vector2(1670, 407)
