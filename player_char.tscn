@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bljfg3rpj7mqf"]
 
-[ext_resource type="Script" uid="uid://dfxbax2w56jvi" path="res://scripts/player/character_body_2d.gd" id="1_oe632"]
 [ext_resource type="Texture2D" uid="uid://bqo1f0kr031l" path="res://assets/FREE_Cat 2D Pixel Art/Sprites/IDLE - kopie.png" id="2_so28d"]
 [ext_resource type="Texture2D" uid="uid://721623sq8p2w" path="res://assets/FREE_Cat 2D Pixel Art/Sprites/ATTACK 1.png" id="3_f6r1s"]
 [ext_resource type="Texture2D" uid="uid://byv5jkc16dl3c" path="res://assets/FREE_Cat 2D Pixel Art/Sprites/JUMP.png" id="3_so28d"]
@@ -9,6 +8,166 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvl01"]
 size = Vector2(26, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(22, 18)
+
+[sub_resource type="GDScript" id="GDScript_player_char"]
+script/source = "extends CharacterBody2D
+
+const SPEED := 130.0
+const JUMP_VELOCITY := -600.0
+const ATTACK_DAMAGE := 5
+const ATTACK_COOLDOWN := 0.35
+
+@export_range(1, 9999, 1) var max_hp: int = 100
+@export_range(0, 9999, 1) var current_hp: int = 100
+
+var facing_direction := 1
+var is_attacking := false
+var healthbar: Node = null
+
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var attack_area: Area2D = $AttackArea
+@onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
+
+func _ready() -> void:
+	current_hp = clamp(current_hp, 0, max_hp)
+	healthbar = _find_healthbar()
+	_setup_healthbar()
+	_sync_healthbar()
+	_update_attack_area()
+	_update_animation()
+
+func _physics_process(delta: float) -> void:
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	if Input.is_action_just_pressed(\"jump\") and is_on_floor() and not is_attacking:
+		velocity.y = JUMP_VELOCITY
+
+	var direction := 0.0
+	if not is_attacking:
+		direction = Input.get_axis(\"left\", \"right\")
+		if direction != 0.0:
+			facing_direction = 1 if direction > 0.0 else -1
+			velocity.x = direction * SPEED
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, SPEED)
+	else:
+		velocity.x = move_toward(velocity.x, 0.0, SPEED)
+
+	_update_attack_area()
+	_update_animation()
+	move_and_slide()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		_try_attack()
+
+func damage(amount: int) -> void:
+	if amount <= 0 or current_hp <= 0:
+		return
+
+	current_hp = max(current_hp - amount, 0)
+	_sync_healthbar()
+	if current_hp == 0:
+		get_tree().reload_current_scene()
+
+func heal(amount: int) -> void:
+	if amount <= 0 or current_hp <= 0:
+		return
+
+	current_hp = clamp(current_hp + amount, 0, max_hp)
+	_sync_healthbar()
+
+func set_health(new_health: int) -> void:
+	current_hp = clamp(new_health, 0, max_hp)
+	_sync_healthbar()
+	if current_hp == 0:
+		get_tree().reload_current_scene()
+
+func reset_health() -> void:
+	current_hp = max_hp
+	_sync_healthbar()
+
+func is_dead() -> bool:
+	return current_hp <= 0
+
+func _try_attack() -> void:
+	if is_attacking or not attack_cooldown_timer.is_stopped():
+		return
+
+	is_attacking = true
+	attack_cooldown_timer.start(ATTACK_COOLDOWN)
+	animated_sprite_2d.play(\"attack\")
+	_update_attack_area()
+	call_deferred(\"_perform_attack_hit\")
+
+func _perform_attack_hit() -> void:
+	await get_tree().physics_frame
+
+	var hit_targets: Array[Node] = []
+	for area in attack_area.get_overlapping_areas():
+		var target := area.get_parent()
+		if target == null or target == self or hit_targets.has(target):
+			continue
+		if target.has_method(\"take_damage\"):
+			target.take_damage(ATTACK_DAMAGE)
+			hit_targets.append(target)
+
+	for body in attack_area.get_overlapping_bodies():
+		if body == self or hit_targets.has(body):
+			continue
+		if body.has_method(\"take_damage\"):
+			body.take_damage(ATTACK_DAMAGE)
+			hit_targets.append(body)
+
+func _update_attack_area() -> void:
+	attack_area.position = Vector2(18 * facing_direction, 4)
+	animated_sprite_2d.flip_h = facing_direction > 0
+
+func _update_animation() -> void:
+	if is_attacking:
+		if animated_sprite_2d.animation != &\"attack\":
+			animated_sprite_2d.play(\"attack\")
+		return
+
+	if not is_on_floor():
+		animated_sprite_2d.play(\"jump\")
+	elif abs(velocity.x) > 5.0:
+		animated_sprite_2d.play(\"walk\")
+	else:
+		animated_sprite_2d.play(\"Idle\")
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if animated_sprite_2d.animation == &\"attack\":
+		is_attacking = false
+		_update_animation()
+
+func _find_healthbar() -> Node:
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return null
+
+	var found_healthbar := current_scene.find_child(\"Healthbar\", true, false)
+	if found_healthbar == null:
+		found_healthbar = current_scene.find_child(\"healthbar\", true, false)
+	return found_healthbar
+
+func _setup_healthbar() -> void:
+	if healthbar == null:
+		return
+	if healthbar.has_method(\"set_max_health\"):
+		healthbar.set_max_health(max_hp)
+
+func _sync_healthbar() -> void:
+	if healthbar == null or not is_instance_valid(healthbar):
+		healthbar = _find_healthbar()
+		_setup_healthbar()
+	if healthbar != null and healthbar.has_method(\"set_health\"):
+		healthbar.set_health(current_hp)
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rqctn"]
 atlas = ExtResource("2_so28d")
@@ -222,9 +381,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_f7gns")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -314,7 +473,7 @@ animations = [{
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=274477576 groups=["player"]]
 collision_layer = 4
 collision_mask = 5
-script = ExtResource("1_oe632")
+script = SubResource("GDScript_player_char")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=870062258 groups=["player"]]
 position = Vector2(1, 3.5)
@@ -322,5 +481,16 @@ shape = SubResource("RectangleShape2D_nvl01")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=347090291 groups=["player"]]
 sprite_frames = SubResource("SpriteFrames_n7ghd")
-animation = &"attack"
-autoplay = "jump"
+animation = &"Idle"
+autoplay = "Idle"
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c5xdx1fqfpw1d" path="res://mouse.tscn" id="3_7m365"]
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="4_5nl2g"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="5_mne6x"]
+[ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="6_igtk7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title_card"]
 bg_color = Color(0.0705882, 0.0941176, 0.141176, 0.82)
@@ -155,8 +156,10 @@ layout_mode = 2
 text = "Use W, S, A, D or Arrows for movement
 To JUMP use Space or W
 Use LMB for attack
-Use RMB to block"
+Hit the mouse twice to defeat it"
 label_settings = SubResource("LabelSettings_hint")
+
+[node name="IngameMenu" parent="HUD/Screen" unique_id=60306681 instance=ExtResource("6_igtk7")]
 
 [node name="Collision parts" type="StaticBody2D" parent="." unique_id=861867002]
 
@@ -193,5 +196,5 @@ position = Vector2(509, 537)
 [node name="CatUi" parent="." unique_id=1884414998 instance=ExtResource("4_5nl2g")]
 
 [node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("5_mne6x")]
-position = Vector2(233, 531)
-scale = Vector2(3.855, 3.855)
+position = Vector2(190, 540)
+scale = Vector2(3, 3)

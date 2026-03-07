@@ -59,12 +59,23 @@ shadow_color = Color(0, 0, 0, 0.25)
 shadow_size = 6
 
 [node name="IngameMenu" type="Control" unique_id=2143574083]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_sikom")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=106865652]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0352941, 0.0352941, 0.0431373, 0.55)
 
 [node name="ButtonsCard" type="PanelContainer" parent="." unique_id=1659367371]
 layout_mode = 0
@@ -73,7 +84,6 @@ offset_top = 263.0
 offset_right = 921.0
 offset_bottom = 453.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_5amsc")
-script = ExtResource("1_sikom")
 
 [node name="ButtonsPadding" type="MarginContainer" parent="ButtonsCard" unique_id=1048325545]
 layout_mode = 2
@@ -86,7 +96,7 @@ theme_override_constants/margin_bottom = 22
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="OptionsButton" type="Button" parent="ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=988002442]
+[node name="ResumeButton" type="Button" parent="ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=988002442]
 custom_minimum_size = Vector2(360, 62)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.968627, 0.894118, 1)
@@ -95,7 +105,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_sikom")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_emmnu")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ndscf")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ndscf")
-text = "OPTIONS"
+text = "RESUME"
 
 [node name="QuitButton" type="Button" parent="ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=1754643489]
 custom_minimum_size = Vector2(360, 62)
@@ -106,4 +116,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_sikom")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_emmnu")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ndscf")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ndscf")
-text = "QUIT"
+text = "QUIT TO MENU"
+
+[connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/QuitButton" to="." method="_on_quit_button_pressed"]
