@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://t8a15jscynyt"]
+
+[ext_resource type="Texture2D" uid="uid://djmx8r5qx2os7" path="res://assets/backgrounds/Wolf_battle_background.png" id="1_1fhj5"]
+[ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_16pka"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
+size = Vector2(786.98987, 2274.5251)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_1jdk1"]
+a = Vector2(1396.8357, 650.6666)
+b = Vector2(-1110.921, 640.256)
+
+[node name="Level3" type="Node2D" unique_id=1608437808]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=902534777]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1921680864]
+position = Vector2(544.61346, 358.875)
+scale = Vector2(0.5032477, 0.36667523)
+texture = ExtResource("1_1fhj5")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2087665207]
+position = Vector2(491, 344.99997)
+scale = Vector2(0.4581784, 0.38422135)
+
+[node name="Les_stena_1" type="CollisionShape2D" parent="StaticBody2D" unique_id=181286562]
+position = Vector2(1680.5681, -187.39186)
+shape = SubResource("RectangleShape2D_j8bo8")
+
+[node name="Les_stena_2" type="CollisionShape2D" parent="StaticBody2D" unique_id=739779779]
+position = Vector2(-1462.3125, -169.1732)
+shape = SubResource("RectangleShape2D_j8bo8")
+
+[node name="Les_podlaha" type="CollisionShape2D" parent="StaticBody2D" unique_id=82780556]
+position = Vector2(15.277893, -2.6026)
+shape = SubResource("SegmentShape2D_1jdk1")
+
+[node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("2_16pka")]
+position = Vector2(566, 547)
+scale = Vector2(2, 2)
