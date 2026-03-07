@@ -7,7 +7,7 @@ script/source = "extends Node2D
 
 const SPEED := 300.0
 const CONTACT_DAMAGE := 10
-const DAMAGE_INTERVAL := 0.0
+
 
 var direction := 1
 var tracked_body: Node2D = null
@@ -36,8 +36,7 @@ func _on_damage_area_body_entered(body: Node2D) -> void:
 	if tracked_damage_target == null:
 		return
 
-	_apply_contact_damage()
-	damage_timer.start(DAMAGE_INTERVAL)
+
 
 func _on_damage_area_body_exited(body: Node2D) -> void:
 	if body != tracked_body:

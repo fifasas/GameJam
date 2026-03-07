@@ -90,7 +90,7 @@ offset_top = 37.0
 offset_right = 303.0
 offset_bottom = 50.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1906019866]
+[node name="AnimatedHead" type="AnimatedSprite2D" parent="." unique_id=1906019866]
 position = Vector2(74, 88)
 scale = Vector2(3.09375, 3.09375)
 sprite_frames = SubResource("SpriteFrames_rvcu8")
