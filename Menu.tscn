@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://t1y812myc67x" path="res://assets/CatRoomFree/ExampleRoom.png" id="1_bg"]
 [ext_resource type="Texture2D" uid="uid://bgt837awipt6u" path="res://assets/AllCatsDemo/Brown/IdleCattt.png" id="2_left_cat"]
 [ext_resource type="Texture2D" uid="uid://ci4w1tkl0r4gl" path="res://assets/AllCatsDemo/EgyptCatFree/IdleCatb.png" id="3_right_cat"]
+[ext_resource type="Script" uid="uid://bj8ywkt8puiyc" path="res://scripts/menu_script.gd" id="4_cx167"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
 bg_color = Color(0.109804, 0.0941176, 0.0823529, 0.84)
@@ -147,6 +148,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_cx167")
 
 [node name="MenuStack" type="VBoxContainer" parent="Screen/MenuCenter" unique_id=65133427]
 custom_minimum_size = Vector2(560, 0)
@@ -239,3 +241,6 @@ layout_mode = 2
 text = "V 0.1.0"
 label_settings = SubResource("LabelSettings_footer")
 horizontal_alignment = 1
+
+[connection signal="pressed" from="Screen/MenuCenter/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/StartButton" to="Screen/MenuCenter" method="_on_start_button_pressed"]
+[connection signal="pressed" from="Screen/MenuCenter/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/QuitButton" to="Screen/MenuCenter" method="_on_quit_button_pressed"]

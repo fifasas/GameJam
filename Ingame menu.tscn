@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://cghsfpb1ugrfa"]
+
+[ext_resource type="Script" uid="uid://bdwxmgakic2sr" path="res://scripts/Ingame_menu.gd" id="1_sikom"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5amsc"]
+bg_color = Color(0.109804, 0.0941176, 0.0823529, 0.84)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.905882, 0.741176, 0.470588, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sikom"]
+bg_color = Color(0.639216, 0.278431, 0.192157, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.847059, 0.576471, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_emmnu"]
+bg_color = Color(0.470588, 0.2, 0.133333, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.92549, 0.760784, 0.486275, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ndscf"]
+bg_color = Color(0.756863, 0.364706, 0.235294, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.886275, 0.65098, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[node name="IngameMenu" type="Control" unique_id=2143574083]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonsCard" type="PanelContainer" parent="." unique_id=1659367371]
+layout_mode = 0
+offset_left = 395.0
+offset_top = 263.0
+offset_right = 921.0
+offset_bottom = 453.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5amsc")
+script = ExtResource("1_sikom")
+
+[node name="ButtonsPadding" type="MarginContainer" parent="ButtonsCard" unique_id=1048325545]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 22
+
+[node name="ButtonsColumn" type="VBoxContainer" parent="ButtonsCard/ButtonsPadding" unique_id=472626068]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="OptionsButton" type="Button" parent="ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=988002442]
+custom_minimum_size = Vector2(360, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.968627, 0.894118, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_sikom")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_emmnu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ndscf")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ndscf")
+text = "OPTIONS"
+
+[node name="QuitButton" type="Button" parent="ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=1754643489]
+custom_minimum_size = Vector2(360, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.968627, 0.894118, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_sikom")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_emmnu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ndscf")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ndscf")
+text = "QUIT"
