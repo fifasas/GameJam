@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_efgsu"]
 [ext_resource type="PackedScene" uid="uid://c5xdx1fqfpw1d" path="res://mouse.tscn" id="3_378y4"]
 [ext_resource type="AudioStream" uid="uid://cx5ufqpojujip" path="res://assets/brackeys_platformer_assets/music/time_for_adventure.mp3" id="4_bxp2c"]
+[ext_resource type="Script" uid="uid://cbpkbybx8nlt4" path="res://scripts/mouse.gd" id="4_jeppt"]
 
 [node name="LivingRoom" type="Node2D" unique_id=1583328751]
 scale = Vector2(1.2, 1.2)
@@ -29,6 +30,7 @@ position_smoothing_speed = 3.015
 [node name="Enemy" parent="." unique_id=237143598 instance=ExtResource("3_378y4")]
 position = Vector2(414.00003, 358)
 scale = Vector2(0.49, 0.49)
+script = ExtResource("4_jeppt")
 
 [node name="music" type="AudioStreamPlayer2D" parent="." unique_id=415120247]
 stream = ExtResource("4_bxp2c")

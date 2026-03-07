@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bcx4gmoh8bbl4"]
 
 [ext_resource type="Texture2D" uid="uid://x5fijpb32vrq" path="res://assets/backgrounds/background_first_level.png" id="1_fnyhn"]
-[ext_resource type="PackedScene" uid="uid://bpgctqjjg1go4" path="res://player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://c5xdx1fqfpw1d" path="res://mouse.tscn" id="3_7m365"]
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="4_5nl2g"]
+[ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="5_mne6x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title_card"]
 bg_color = Color(0.0705882, 0.0941176, 0.141176, 0.82)
@@ -68,10 +68,6 @@ b = Vector2(1150, 596)
 a = Vector2(1277, 596)
 b = Vector2(35, 596)
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_mne6x"]
-a = Vector2(241, 392)
-b = Vector2(414, 395)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nl2g"]
 size = Vector2(799, 385.5)
 
@@ -83,10 +79,6 @@ size = Vector2(799, 385.5)
 position = Vector2(578, 324.00003)
 scale = Vector2(0.42154944, 0.42154956)
 texture = ExtResource("1_fnyhn")
-
-[node name="player" parent="." unique_id=1297489525 instance=ExtResource("1_player")]
-position = Vector2(184, 543)
-scale = Vector2(3, 3)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=291792246]
 
@@ -191,9 +183,6 @@ shape = SubResource("SegmentShape2D_5nl2g")
 [node name="Floor" type="CollisionShape2D" parent="Collision parts/Floor" unique_id=179782806]
 shape = SubResource("SegmentShape2D_fnyhn")
 
-[node name="Table" type="CollisionShape2D" parent="Collision parts" unique_id=733709468]
-shape = SubResource("SegmentShape2D_mne6x")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision parts" unique_id=1566669247]
 position = Vector2(1670, 407)
 shape = SubResource("RectangleShape2D_5nl2g")
@@ -202,3 +191,7 @@ shape = SubResource("RectangleShape2D_5nl2g")
 position = Vector2(509, 537)
 
 [node name="CatUi" parent="." unique_id=1884414998 instance=ExtResource("4_5nl2g")]
+
+[node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("5_mne6x")]
+position = Vector2(233, 531)
+scale = Vector2(3.855, 3.855)
