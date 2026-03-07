@@ -2,13 +2,18 @@
 
 [ext_resource type="Texture2D" uid="uid://wi5ur73kye0g" path="res://assets/backgrounds/longest room.jpg" id="1_nmjpi"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_xdadj"]
+[ext_resource type="PackedScene" uid="uid://cevx03ll33d0c" path="res://yarnboss.tscn" id="3_xdadj"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_eoq84"]
+a = Vector2(2173, 0)
+b = Vector2(0, 1)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_nmjpi"]
 a = Vector2(1458.385, -25.284393)
 b = Vector2(-1211.7428, -42.45871)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xdadj"]
-size = Vector2(286, 1120)
+size = Vector2(366, 1071)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_xdadj"]
 a = Vector2(418, 446)
@@ -66,6 +71,12 @@ position_smoothing_enabled = true
 position = Vector2(1953.9999, 546)
 scale = Vector2(2.096154, 2.0961537)
 collision_layer = 3
+collision_mask = 3
+
+[node name="strecha" type="CollisionShape2D" parent="StaticBody2D" unique_id=628213808]
+position = Vector2(-932.1834, -260.47708)
+scale = Vector2(0.47706422, 0.47706425)
+shape = SubResource("SegmentShape2D_eoq84")
 
 [node name="podlaha" type="CollisionShape2D" parent="StaticBody2D" unique_id=584504152]
 light_mask = 7
@@ -131,3 +142,6 @@ position = Vector2(-932.1834, -260.47708)
 scale = Vector2(0.47706422, 0.47706425)
 shape = SubResource("SegmentShape2D_15wb7")
 one_way_collision = true
+
+[node name="yarnboss" parent="." unique_id=566931756 instance=ExtResource("3_xdadj")]
+position = Vector2(1042, 241)

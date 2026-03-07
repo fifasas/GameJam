@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://cevx03ll33d0c"]
+
+[ext_resource type="Script" uid="uid://rnkfq6echj3m" path="res://yarnboss.gd" id="1_en4gc"]
+[ext_resource type="Texture2D" uid="uid://b3xbglo6k1tr" path="res://assets/animations/klubko_1.png" id="2_e37tb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibeeu"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(0, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_okw6n"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(64, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bay5w"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(128, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7renj"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(192, 0, 64, 58)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tc7rl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ibeeu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_okw6n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bay5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7renj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_en4gc"]
+radius = 25.0
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=566931756]
+motion_mode = 1
+script = ExtResource("1_en4gc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=519913855]
+sprite_frames = SubResource("SpriteFrames_tc7rl")
+autoplay = "default"
+frame = 2
+frame_progress = 0.4166169
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=11564220]
+position = Vector2(1, 0)
+shape = SubResource("CircleShape2D_en4gc")
