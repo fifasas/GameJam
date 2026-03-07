@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://lnr658yg8ovj"]
+[gd_scene format=3 uid="uid://bwkftu58bahr2"]
 
 [ext_resource type="Texture2D" uid="uid://c44yerhsar2cj" path="res://assets/animations/wolfsheet1.png" id="2_v6tq2"]
 [ext_resource type="Texture2D" uid="uid://drec4iwalfyjr" path="res://assets/animations/WOLFHOWL.png" id="3_en2fo"]
@@ -11,7 +11,11 @@ signal boss_defeated
 const WALK_SPEED := 70.0
 const RUN_SPEED := 155.0
 const DETECTION_RANGE := 520.0
-const MAX_VERTICAL_TRACKING := 140.0
+# Zvýšeno, aby boss sledoval hráče i při vysokém výskoku
+const MAX_VERTICAL_TRACKING := 800.0 
+# Limit, jak vysoko může hráč být, aby boss spustil animaci útoku
+const MAX_ATTACK_HEIGHT := 150.0 
+
 const ATTACK_RANGE := 95.0
 const ATTACK_DAMAGE := 20
 const ATTACK_COOLDOWN := 1.1
@@ -107,7 +111,9 @@ func _handle_player_tracking(player_target: CharacterBody2D) -> void:
 
 	player_spotted = true
 	var vertical_distance: float = abs(player_target.global_position.y - global_position.y)
-	if abs(delta_x) <= ATTACK_RANGE and vertical_distance <= MAX_VERTICAL_TRACKING:
+	
+	# Boss zaútočí pouze pokud je hráč blízko horizontálně A ZÁROVEŇ není moc vysoko
+	if abs(delta_x) <= ATTACK_RANGE and vertical_distance <= MAX_ATTACK_HEIGHT:
 		if attack_cooldown_timer.is_stopped():
 			_start_attack()
 		else:
@@ -115,14 +121,15 @@ func _handle_player_tracking(player_target: CharacterBody2D) -> void:
 			velocity.x = 0.0
 		return
 
+	# Pokud je hráč vysoko nebo daleko, boss pod něj prostě běží
 	state = State.RUN
 	velocity.x = sign(delta_x) * RUN_SPEED
 
 func _handle_patrol() -> void:
 	if global_position.x <= spawn_x - PATROL_DISTANCE:
-		patrol_direction = 1
-	elif global_position.x >= spawn_x + PATROL_DISTANCE:
 		patrol_direction = -1
+	elif global_position.x >= spawn_x + PATROL_DISTANCE:
+		patrol_direction = 1
 
 	facing_direction = patrol_direction
 	state = State.WALK
@@ -154,6 +161,7 @@ func _on_attack_hit_timer_timeout() -> void:
 		if target == null or target == self or hit_targets.has(target):
 			continue
 
+		# Voláme funkci damage(amount) u hráče
 		if target.has_method(\"damage\"):
 			target.damage(ATTACK_DAMAGE)
 		elif target.has_method(\"set_health\"):
@@ -213,10 +221,11 @@ func _find_damage_target(body: Node) -> Node:
 	return null
 
 func _update_attack_area() -> void:
-	attack_area.position = Vector2(72.0 * facing_direction, -60.0)
+	attack_area.position = Vector2(72.0 * facing_direction, -0.0)
 
 func _update_facing() -> void:
-	animated_sprite_2d.flip_h = facing_direction > 0
+	# Otočení vizuálu spritu podle tvého požadavku
+	animated_sprite_2d.flip_h = facing_direction < 0
 
 func _update_animation() -> void:
 	match state:
@@ -249,8 +258,8 @@ func _reset_flash_after_delay(flash_id: int) -> void:
 	animated_sprite_2d.modulate = Color(1.0, 1.0, 1.0, 1.0)
 "
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(280, 147)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_55onw"]
+size = Vector2(22.740742, 40.296295)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_attack_0"]
 atlas = ExtResource("2_v6tq2")
@@ -428,15 +437,18 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
-size = Vector2(339, 150.5)
+size = Vector2(299, 177.25)
 
 [node name="Wolf" type="CharacterBody2D" unique_id=2094700935 groups=["enemy"]]
+collision_layer = 7
 collision_mask = 7
 script = SubResource("GDScript_wolf_local")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=212761686]
-position = Vector2(20, -64.5)
-shape = SubResource("RectangleShape2D_body")
+position = Vector2(21.999996, -72.25)
+rotation = 1.5707964
+scale = Vector2(6.75, 6.75)
+shape = SubResource("RectangleShape2D_55onw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1606477093]
 position = Vector2(0, -88)
@@ -446,11 +458,12 @@ animation = &"howl"
 autoplay = "idle"
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=402641802]
-collision_layer = 0
-collision_mask = 4
+position = Vector2(18.595, 0)
+collision_layer = 15
+collision_mask = 15
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=45119116]
-position = Vector2(22.5, -66.75)
+position = Vector2(-0.09499931, -77.375)
 shape = SubResource("RectangleShape2D_attack")
 
 [node name="AttackHitTimer" type="Timer" parent="." unique_id=1612868263]

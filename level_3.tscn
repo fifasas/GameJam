@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://dvvko6ij0m4iv"]
+[gd_scene format=3 uid="uid://hurbls1ystfw"]
 
 [ext_resource type="Texture2D" uid="uid://dor378g4rxj4" path="res://assets/backgrounds/Background_forest.png" id="1_16pka"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_16pka"]
-[ext_resource type="PackedScene" uid="uid://lnr658yg8ovj" path="res://Wolf.tscn" id="3_d8m5v"]
-[ext_resource type="Script" uid="uid://bksme736205ho" path="res://scripts/log_bridge.gd" id="4_m3kpu"]
+[ext_resource type="PackedScene" uid="uid://bwkftu58bahr2" path="res://Wolf.tscn" id="3_d8m5v"]
+[ext_resource type="Script" path="res://scripts/log_bridge.gd" id="4_m3kpu"]
 [ext_resource type="Texture2D" uid="uid://cucktbpvrfh8x" path="res://assets/log.png" id="5_6j7h5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
@@ -56,17 +56,21 @@ scale = Vector2(2.182556, 2.6026664)
 shape = SubResource("SegmentShape2D_16pka")
 
 [node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("2_16pka")]
-position = Vector2(3726, 853)
+position = Vector2(1463, 858)
 scale = Vector2(4, 4)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=823001870]
 position = Vector2(1, 2.75)
 scale = Vector2(0.25, 0.25)
 zoom = Vector2(0.8, 0.8)
+limit_left = 0
+limit_top = 0
+limit_right = 3900
+limit_bottom = 1080
 position_smoothing_enabled = true
 
 [node name="Wolf" parent="." unique_id=2096052260 instance=ExtResource("3_d8m5v")]
-position = Vector2(1016.86725, 930)
+position = Vector2(1017, 918)
 
 [node name="Log" type="Node2D" parent="." unique_id=929019998]
 position = Vector2(1974, 835)
