@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dssxlaeju5our"]
+
+[ext_resource type="Script" uid="uid://q5fi06wuujwg" path="res://scripts/myslivingroom.gd" id="1_lbbmm"]
+[ext_resource type="Texture2D" uid="uid://c77qnk54ikuv0" path="res://assets/mau).png" id="2_lbbmm"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ccc1j"]
+radius = 47.0
+height = 142.0
+
+[node name="Myslivingroom" type="Area2D" unique_id=1288885474]
+script = ExtResource("1_lbbmm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1073433312]
+position = Vector2(76, 231)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_ccc1j")
+
+[node name="Mau)" type="Sprite2D" parent="." unique_id=1060545873]
+position = Vector2(722, 676)
+scale = Vector2(1.5146667, 1.5146667)
+texture = ExtResource("2_lbbmm")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

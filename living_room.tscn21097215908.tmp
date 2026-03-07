@@ -43,6 +43,6 @@ bus = &"bg music"
 position = Vector2(-2.5, -4.1666665)
 shape = SubResource("SegmentShape2D_378y4")
 
-[node name="Myslivingroom" parent="." unique_id=1288885474 instance=ExtResource("4_jeppt")]
-position = Vector2(375.8333, 235.83333)
-scale = Vector2(0.24, 0.24)
+[node name="Myslivingroom" parent="." unique_id=343200040 instance=ExtResource("4_jeppt")]
+position = Vector2(370.8333, 254.16664)
+scale = Vector2(0.19, 0.19)
