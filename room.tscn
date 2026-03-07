@@ -27,7 +27,7 @@ position = Vector2(-152.17558, -98.45237)
 scale = Vector2(0.2717421, 0.2853692)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=513913216]
-position = Vector2(224.42871, 184.08566)
+position = Vector2(253, 186)
 shape = SubResource("RectangleShape2D_xal5j")
 
 [node name="Walls2" type="StaticBody2D" parent="." unique_id=1484572330]
