@@ -168,10 +168,127 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("44_557pi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_767mb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_i0fb5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_6agnd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_4a00t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_em6xj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_w4urg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_i0md5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_bg2g6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_lgua3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_oir2u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_ex3ui")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_h8ayi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_lyyg7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_s0g7d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ta4tt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_3syja")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_wes0k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_obhax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_ef6dv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_kma2q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_0wui6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_ptk2m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_vpk7l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_l7csl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_3vhfl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_tdiue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_lna51")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_dssdd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_depc5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ot7lc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_yh2ck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_5waks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_mnukg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_drwmw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_upfq3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_4svew")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_x4abi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_0cqpt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_14h7w")
 }],
 "loop": true,
 "name": &"default",
-"speed": 10.0
+"speed": 15.0
 }]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
@@ -432,6 +549,7 @@ position = Vector2(27.999891, 15.749966)
 scale = Vector2(1.0937499, 1.0937499)
 sprite_frames = SubResource("SpriteFrames_75wuu")
 autoplay = "default"
+frame_progress = 0.13257791
 
 [node name="Screen" type="Control" parent="." unique_id=777555446]
 layout_mode = 3
@@ -512,7 +630,7 @@ theme_override_constants/separation = 8
 
 [node name="Kicker" type="Label" parent="Screen/MenuCenter/MenuStack/TitleCard/TitlePadding/TitleContent" unique_id=1917974949]
 layout_mode = 2
-text = "A HAND-DRAWN CAT CAPER"
+text = "A short cat adventure"
 label_settings = SubResource("LabelSettings_kicker")
 horizontal_alignment = 1
 
@@ -524,7 +642,7 @@ horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Screen/MenuCenter/MenuStack/TitleCard/TitlePadding/TitleContent" unique_id=398309412]
 layout_mode = 2
-text = "Bosses, bullets, and one very brave cat."
+text = "Alias what happens when a cat gets bored"
 label_settings = SubResource("LabelSettings_subtitle")
 horizontal_alignment = 1
 

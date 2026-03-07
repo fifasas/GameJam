@@ -9,11 +9,17 @@ func _ready():
 	set_collision_mask_value(2, true)
 
 func _physics_process(delta: float) -> void:
-	# move_and_collide vrací info o nárazu (včetně nárazu do hráče)
 	var collision = move_and_collide(velocity * delta)
 
 	if collision:
-		# Odrazí se od čehokoliv, co má kolizi (zeď i hráč)
+		# 1. Získáme objekt, do kterého jsme narazili
+		var collider = collision.get_collider()
+		
+		# 2. Zkontrolujeme, jestli má funkci "damage" (což tvůj hráč má)
+		if collider.has_method("damage"):
+			collider.damage(10) # Tady nastav, kolik HP má hráč ztratit
+		
+		# Původní logika odrazu
 		velocity = velocity.bounce(collision.get_normal())
 		velocity = velocity.normalized() * SPEED
 
