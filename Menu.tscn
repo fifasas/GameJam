@@ -236,6 +236,6 @@ text = "QUIT"
 
 [node name="Footer" type="Label" parent="Screen/MenuCenter/MenuStack" unique_id=217282709]
 layout_mode = 2
-text = "Pick a door and start some trouble."
+text = "V 0.1.0"
 label_settings = SubResource("LabelSettings_footer")
 horizontal_alignment = 1

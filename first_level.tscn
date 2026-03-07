@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://bcx4gmoh8bbl4"]
+
+[ext_resource type="Texture2D" uid="uid://dxb0yo2kul3pp" path="res://assets/brackeys_platformer_assets/sprites/platforms.png" id="1_fnyhn"]
+[ext_resource type="PackedScene" uid="uid://bpgctqjjg1go4" path="res://player.tscn" id="2_7m365"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_j4ciw"]
+a = Vector2(0, 512)
+b = Vector2(1152, 512)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5nl2g"]
+texture = ExtResource("1_fnyhn")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_mne6x"]
+sources/0 = SubResource("TileSetAtlasSource_5nl2g")
+
+[node name="FirstLevel" type="Node2D" unique_id=1172531662]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1294189014]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=184127107]
+shape = SubResource("SegmentShape2D_j4ciw")
+
+[node name="player" parent="." unique_id=1297489525 instance=ExtResource("2_7m365")]
+position = Vector2(71, 480)
+
+[node name="TileMap" type="TileMap" parent="." unique_id=88763356]
+tile_set = SubResource("TileSet_mne6x")
+format = 2
+layer_0/tile_data = PackedInt32Array(2097152, 0, 0, 2097153, 0, 0, 2097154, 0, 0, 2097155, 0, 0, 2097156, 0, 0, 2097157, 0, 0, 2097158, 0, 0, 2097159, 0, 0, 2097160, 0, 0, 2097161, 0, 0, 2097162, 0, 0, 2097163, 0, 0, 2097164, 0, 0, 2097165, 0, 0, 2097166, 0, 0, 2097167, 0, 0, 2097168, 0, 0, 2097169, 0, 0, 2097170, 0, 0, 2097171, 0, 0, 2097172, 0, 0, 2097173, 0, 0, 2097174, 0, 0, 2097175, 0, 0, 2097176, 0, 0, 2097177, 0, 0, 2097178, 0, 0, 2097179, 0, 0, 2097180, 0, 0, 2097181, 0, 0, 2097182, 0, 0, 2097183, 0, 0, 2097184, 0, 0, 2097185, 0, 0, 2097186, 0, 0, 2097187, 0, 0, 2097188, 0, 0, 2097189, 0, 0, 2097190, 0, 0, 2097191, 0, 0, 2097192, 0, 0, 2097193, 0, 0, 2097194, 0, 0, 2097195, 0, 0, 2097196, 0, 0, 2097197, 0, 0, 2097198, 0, 0, 2097199, 0, 0, 2097200, 0, 0, 2097201, 0, 0, 2097202, 0, 0, 2097203, 0, 0, 2097204, 0, 0, 2097205, 0, 0, 2097206, 0, 0, 2097207, 0, 0, 2097208, 0, 0, 2097209, 0, 0, 2097210, 0, 0, 2097211, 0, 0, 2097212, 0, 0, 2097213, 0, 0, 2097214, 0, 0, 2097215, 0, 0, 2097216, 0, 0, 2097217, 0, 0, 2097218, 0, 0, 2097219, 0, 0, 2097220, 0, 0, 2097221, 0, 0, 2097222, 0, 0, 2097223, 0, 0)
