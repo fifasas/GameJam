@@ -539,6 +539,8 @@ collision_mask = 1
 
 [node name="yarnboss" parent="." unique_id=566931756 instance=ExtResource("3_xdadj")]
 position = Vector2(1042, 241)
+max_hp = 40
+current_hp = 40
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=130833644]
 
