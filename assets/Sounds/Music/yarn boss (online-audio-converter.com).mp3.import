@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dcikvr0klvikq"
+path="res://.godot/imported/yarn boss (online-audio-converter.com).mp3-88aaa4b456bede68a7b4c0105c3479bc.mp3str"
+
+[deps]
+
+source_file="res://assets/Sounds/Music/yarn boss (online-audio-converter.com).mp3"
+dest_files=["res://.godot/imported/yarn boss (online-audio-converter.com).mp3-88aaa4b456bede68a7b4c0105c3479bc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

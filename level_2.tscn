@@ -6,12 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://cevx03ll33d0c" path="res://yarnboss.tscn" id="3_xdadj"]
 [ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="4_hk1x8"]
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="4_t5a6v"]
+[ext_resource type="AudioStream" uid="uid://dcikvr0klvikq" path="res://assets/Sounds/Music/yarn boss (online-audio-converter.com).mp3" id="5_wm7qf"]
 [ext_resource type="Texture2D" uid="uid://qcmljy1av1t5" path="res://assets/animations/arrow_sheet.png" id="7_7j8ne"]
 
 [sub_resource type="GDScript" id="GDScript_level_2_local"]
 script/source = "extends Node2D
 
 const NEXT_LEVEL_PATH := \"res://level_3.tscn\"
+const DEATH_SCREEN_PATH := \"res://DeathScreen.tscn\"
+const DEATH_SCREEN_PENDING_KEY := &\"show_death_screen_after_reload\"
 
 var boss_defeated := false
 var player_in_exit_zone := false
@@ -20,8 +23,14 @@ var player_in_exit_zone := false
 @onready var arrow_1: AnimatedSprite2D = $\"Arrow 1\"
 @onready var arrow_2: AnimatedSprite2D = $\"Arrow 2\"
 @onready var yarnboss: Node = $yarnboss
+@onready var healthbar: Node = $HUD/Screen/CatUi/Healthbar
 
 func _ready() -> void:
+\tif _consume_pending_death_screen():
+\t\tcall_deferred(\"_show_death_screen\")
+\t\treturn
+\tif healthbar != null and healthbar.has_signal(\"health_depleted\"):
+\t\thealthbar.connect(\"health_depleted\", Callable(self, \"_on_health_depleted\"), CONNECT_ONE_SHOT)
 	if yarnboss != null:
 		yarnboss.tree_exited.connect(_on_yarnboss_tree_exited, CONNECT_ONE_SHOT)
 	_update_exit_guidance()
@@ -48,6 +57,19 @@ func _on_exit_square_body_exited(body: Node2D) -> void:
 
 	player_in_exit_zone = false
 	_update_exit_guidance()
+
+func _on_health_depleted() -> void:
+\tget_tree().set_meta(DEATH_SCREEN_PENDING_KEY, true)
+
+func _consume_pending_death_screen() -> bool:
+\tif not get_tree().has_meta(DEATH_SCREEN_PENDING_KEY):
+\t\treturn false
+\tvar should_show: bool = bool(get_tree().get_meta(DEATH_SCREEN_PENDING_KEY))
+\tget_tree().remove_meta(DEATH_SCREEN_PENDING_KEY)
+\treturn should_show
+
+func _show_death_screen() -> void:
+\tget_tree().change_scene_to_file(DEATH_SCREEN_PATH)
 
 func _update_exit_guidance() -> void:
 	arrow_1.visible = boss_defeated
@@ -406,6 +428,11 @@ animations = [{
 [node name="Level 2" type="Node2D" unique_id=1833892557]
 script = SubResource("GDScript_level_2_local")
 
+[node name="BossMusic" type="AudioStreamPlayer" parent="." unique_id=1778213248]
+stream = ExtResource("5_wm7qf")
+volume_db = -16.0
+autoplay = true
+
 [node name="LongestRoom" type="Sprite2D" parent="." unique_id=640240209]
 position = Vector2(1084.7305, 303.5)
 scale = Vector2(1.1634616, 1.1634614)
@@ -502,9 +529,11 @@ one_way_collision = true
 
 [node name="ryba" parent="StaticBody2D" unique_id=1774917523 instance=ExtResource("3_7j8ne")]
 position = Vector2(-31.009125, -32.44036)
+scale = Vector2(0.5, 0.5)
 
 [node name="ryba2" parent="StaticBody2D" unique_id=7835955 instance=ExtResource("3_7j8ne")]
 position = Vector2(-805.5, -33.541)
+scale = Vector2(0.5, 0.5)
 
 [node name="yarnboss" parent="." unique_id=566931756 instance=ExtResource("3_xdadj")]
 position = Vector2(1042, 241)

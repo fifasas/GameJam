@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c3ppat3mf12y" path="res://scripts/healing.gd" id="1_1hpxd"]
 [ext_resource type="Texture2D" uid="uid://dskj0d3e2p0op" path="res://assets/fish_green1_1.png" id="2_dtd52"]
+[ext_resource type="AudioStream" path="res://assets/Sounds/Ryba.mp3" id="3_s0u8d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1hpxd"]
 radius = 34.0
@@ -85,4 +86,12 @@ scale = Vector2(3.1, 3.1)
 sprite_frames = SubResource("SpriteFrames_2u4u0")
 autoplay = "default"
 
+[node name="FishAudio" type="AudioStreamPlayer2D" parent="." unique_id=184930118]
+position = Vector2(22, 19)
+stream = ExtResource("3_s0u8d")
+volume_db = -10.0
+max_distance = 420.0
+attenuation = 2.0
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="FishAudio" to="." method="_on_fish_audio_finished"]

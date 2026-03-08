@@ -1,0 +1,241 @@
+[gd_scene format=3 uid="uid://budfuenjgrwje"]
+
+[ext_resource type="FontFile" uid="uid://c1820v3ck2hjv" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8.ttf" id="1_font"]
+[ext_resource type="AudioStream" uid="uid://d0w2wy6ar7vlr" path="res://assets/Sounds/Klik_1.mp3" id="2_click"]
+
+[sub_resource type="GDScript" id="GDScript_death_screen"]
+script/source = "extends Control
+
+const LOBBY_PATH := \"res://living_room.tscn\"
+const HEALTH_META_KEY: StringName = &\"player_saved_health\"
+const CLICK_DELAY := 0.12
+
+@onready var lobby_button: Button = $Screen/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/LobbyButton
+@onready var click_audio: AudioStreamPlayer = $ClickAudio
+
+func _ready() -> void:
+\tget_tree().paused = false
+\t_clear_saved_health()
+\tlobby_button.grab_focus()
+
+func _on_lobby_button_pressed() -> void:
+\tawait _play_click_feedback()
+\t_clear_saved_health()
+\tget_tree().change_scene_to_file(LOBBY_PATH)
+
+func _on_quit_button_pressed() -> void:
+\tawait _play_click_feedback()
+\t_clear_saved_health()
+\tget_tree().quit()
+
+func _play_click_feedback() -> void:
+\tif is_instance_valid(click_audio):
+\t\tclick_audio.stop()
+\t\tclick_audio.play()
+\tawait get_tree().create_timer(CLICK_DELAY).timeout
+
+func _clear_saved_health() -> void:
+\tif get_tree().has_meta(HEALTH_META_KEY):
+\t\tget_tree().remove_meta(HEALTH_META_KEY)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_backdrop"]
+bg_color = Color(0.027451, 0.0196078, 0.0235294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.109804, 0.0588235, 0.0627451, 0.92)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.933333, 0.741176, 0.513726, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+bg_color = Color(0.615686, 0.239216, 0.219608, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.862745, 0.631373, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+bg_color = Color(0.431373, 0.145098, 0.133333, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.933333, 0.760784, 0.521569, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.760784, 0.337255, 0.278431, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.905882, 0.698039, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_kicker"]
+font = ExtResource("1_font")
+font_size = 22
+font_color = Color(1, 0.713726, 0.584314, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("1_font")
+font_size = 60
+font_color = Color(1, 0.945098, 0.901961, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
+font = ExtResource("1_font")
+font_size = 24
+font_color = Color(1, 0.905882, 0.85098, 0.9)
+
+[sub_resource type="LabelSettings" id="LabelSettings_footer"]
+font = ExtResource("1_font")
+font_size = 18
+font_color = Color(1, 0.835294, 0.729412, 0.78)
+
+[node name="DeathScreen" type="Control" unique_id=1914247539]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_death_screen")
+
+[node name="Backdrop" type="Panel" parent="." unique_id=181054913]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_backdrop")
+
+[node name="TopGlow" type="ColorRect" parent="." unique_id=2081018699]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 236.0
+grow_horizontal = 2
+color = Color(0.623529, 0.14902, 0.137255, 0.16)
+
+[node name="Screen" type="CenterContainer" parent="." unique_id=181232516]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuStack" type="VBoxContainer" parent="Screen" unique_id=209419227]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleCard" type="PanelContainer" parent="Screen/MenuStack" unique_id=1264455598]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="TitlePadding" type="MarginContainer" parent="Screen/MenuStack/TitleCard" unique_id=1478403130]
+layout_mode = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 24
+
+[node name="TitleContent" type="VBoxContainer" parent="Screen/MenuStack/TitleCard/TitlePadding" unique_id=1886853733]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Kicker" type="Label" parent="Screen/MenuStack/TitleCard/TitlePadding/TitleContent" unique_id=463490427]
+layout_mode = 2
+text = "Out of HP"
+label_settings = SubResource("LabelSettings_kicker")
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Screen/MenuStack/TitleCard/TitlePadding/TitleContent" unique_id=1630315647]
+layout_mode = 2
+text = "YOU DIED"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Screen/MenuStack/TitleCard/TitlePadding/TitleContent" unique_id=1232809759]
+layout_mode = 2
+text = "The cat used all nine lives for this run."
+label_settings = SubResource("LabelSettings_subtitle")
+horizontal_alignment = 1
+
+[node name="ButtonsCard" type="PanelContainer" parent="Screen/MenuStack" unique_id=895434879]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="ButtonsPadding" type="MarginContainer" parent="Screen/MenuStack/ButtonsCard" unique_id=1909241496]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 22
+
+[node name="ButtonsColumn" type="VBoxContainer" parent="Screen/MenuStack/ButtonsCard/ButtonsPadding" unique_id=164723141]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="LobbyButton" type="Button" parent="Screen/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=773564057]
+custom_minimum_size = Vector2(360, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.968627, 0.894118, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_hover")
+text = "LOBBY"
+
+[node name="QuitButton" type="Button" parent="Screen/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn" unique_id=362503349]
+custom_minimum_size = Vector2(360, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.968627, 0.894118, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_hover")
+text = "QUIT GAME"
+
+[node name="Footer" type="Label" parent="Screen/MenuStack" unique_id=1235962383]
+layout_mode = 2
+text = "Choose where to go next."
+label_settings = SubResource("LabelSettings_footer")
+horizontal_alignment = 1
+
+[node name="ClickAudio" type="AudioStreamPlayer" parent="." unique_id=1044866059]
+stream = ExtResource("2_click")
+volume_db = -4.0
+
+[connection signal="pressed" from="Screen/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/LobbyButton" to="." method="_on_lobby_button_pressed"]
+[connection signal="pressed" from="Screen/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/QuitButton" to="." method="_on_quit_button_pressed"]

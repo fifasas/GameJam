@@ -8,8 +8,118 @@
 [ext_resource type="AudioStream" uid="uid://dexr7mo055imp" path="res://assets/Sounds/Birds.mp3" id="6_ku4q1"]
 [ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="7_5mtt0"]
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="7_7ds5r"]
-[ext_resource type="AudioStream" uid="uid://d1vhxqpf6klw6" path="res://assets/brackeys_platformer_assets/music/Boss_music_1.mp3" id="8_ccfws"]
-[ext_resource type="AudioStream" uid="uid://dqhf0nerr0gtx" path="res://assets/brackeys_platformer_assets/music/Boss_music_2.mp3" id="9_4mcji"]
+[ext_resource type="AudioStream" uid="uid://csbf8wvvsvlwh" path="res://assets/brackeys_platformer_assets/music/Boss_music_1.mp3" id="8_ccfws"]
+[ext_resource type="AudioStream" uid="uid://be4bth7gao4qx" path="res://assets/brackeys_platformer_assets/music/Boss_music_2.mp3" id="9_4mcji"]
+[ext_resource type="AudioStream" uid="uid://dow04mycbt5pv" path="res://assets/Sounds/Rieka.mp3" id="10_sm2sm"]
+
+[sub_resource type="GDScript" id="GDScript_level_3"]
+script/source = "extends Node2D
+
+const HEALING_SCENE := preload(\"res://healing.tscn\")
+const END_SCREEN_PATH := \"res://EndScreen.tscn\"
+const DEATH_SCREEN_PATH := \"res://DeathScreen.tscn\"
+const DEATH_SCREEN_PENDING_KEY := &\"show_death_screen_after_reload\"
+const HEALING_SLOT_XS := [760.0, 1120.0, 1480.0, 1840.0, 2200.0]
+const HEALING_GROUND_Y := 889.0
+const MIN_HEALING_SPAWNS := 1
+const MAX_HEALING_SPAWNS := 2
+const HEALING_X_JITTER := 55.0
+
+var boss_music_started := false
+var rng := RandomNumberGenerator.new()
+
+@onready var log_bridge: Node2D = $Log
+@onready var bridge_collision: CollisionShape2D = $Log/BridgeBody/CollisionShape2D
+@onready var birds_ambience: AudioStreamPlayer = $BirdsAmbience
+@onready var boss_music_1: AudioStreamPlayer = $BossMusic1
+@onready var boss_music_2: AudioStreamPlayer = $BossMusic2
+@onready var river_ambience: AudioStreamPlayer2D = $RiverAmbience
+@onready var healing_spawns: Node2D = $HealingSpawns
+@onready var healthbar: Node = $HUD/Screen/CatUi/Healthbar
+@onready var wolf: CharacterBody2D = $Wolf
+@onready var wolf_sprite: AnimatedSprite2D = $Wolf/AnimatedSprite2D
+
+func _ready() -> void:
+\tif _consume_pending_death_screen():
+\t\tcall_deferred(\"_show_death_screen\")
+\t\treturn
+	rng.randomize()
+	_lock_wolf_until_log_drops()
+	_spawn_random_healing()
+\tif healthbar != null and healthbar.has_signal(\"health_depleted\"):
+\t\thealthbar.connect(\"health_depleted\", Callable(self, \"_on_health_depleted\"), CONNECT_ONE_SHOT)
+	if wolf != null and wolf.has_signal(\"boss_defeated\"):
+		wolf.connect(\"boss_defeated\", Callable(self, \"_on_wolf_boss_defeated\"), CONNECT_ONE_SHOT)
+
+func _process(_delta: float) -> void:
+	if boss_music_started:
+		return
+	if not bridge_collision.disabled and _has_log_fallen():
+		_start_boss_music()
+
+func _has_log_fallen() -> bool:
+	var has_fallen_value: Variant = log_bridge.get(\"has_fallen\")
+	if has_fallen_value is bool:
+		return has_fallen_value
+	return false
+
+func _start_boss_music() -> void:
+	boss_music_started = true
+	_release_wolf()
+	birds_ambience.stop()
+	boss_music_1.play()
+
+func _on_boss_music_1_finished() -> void:
+	if boss_music_started:
+		boss_music_2.play()
+
+func _on_health_depleted() -> void:
+\tget_tree().set_meta(DEATH_SCREEN_PENDING_KEY, true)
+
+func _consume_pending_death_screen() -> bool:
+\tif not get_tree().has_meta(DEATH_SCREEN_PENDING_KEY):
+\t\treturn false
+\tvar should_show: bool = bool(get_tree().get_meta(DEATH_SCREEN_PENDING_KEY))
+\tget_tree().remove_meta(DEATH_SCREEN_PENDING_KEY)
+\treturn should_show
+
+func _show_death_screen() -> void:
+\tget_tree().change_scene_to_file(DEATH_SCREEN_PATH)
+
+func _on_river_ambience_finished() -> void:
+	if is_instance_valid(river_ambience):
+		river_ambience.play()
+
+func _on_wolf_boss_defeated() -> void:
+	call_deferred(\"_show_end_screen\")
+
+func _show_end_screen() -> void:
+	get_tree().change_scene_to_file(END_SCREEN_PATH)
+
+func _lock_wolf_until_log_drops() -> void:
+	if wolf == null:
+		return
+	wolf.velocity = Vector2.ZERO
+	wolf.set_physics_process(false)
+	if is_instance_valid(wolf_sprite):
+		wolf_sprite.play(&\"idle\")
+
+func _release_wolf() -> void:
+	if wolf == null:
+		return
+	wolf.set_physics_process(true)
+
+func _spawn_random_healing() -> void:
+	var slot_xs: Array = HEALING_SLOT_XS.duplicate()
+	slot_xs.shuffle()
+	var spawn_count := rng.randi_range(MIN_HEALING_SPAWNS, min(MAX_HEALING_SPAWNS, slot_xs.size()))
+
+	for i in range(spawn_count):
+		var healing_pickup := HEALING_SCENE.instantiate()
+		var spawn_x: float = float(slot_xs[i]) + rng.randf_range(-HEALING_X_JITTER, HEALING_X_JITTER)
+		healing_pickup.position = Vector2(spawn_x, HEALING_GROUND_Y)
+		healing_spawns.add_child(healing_pickup)
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
 size = Vector2(1428.0261, 2477.6357)
@@ -31,73 +141,6 @@ height = 310.67334
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wj7gw"]
 size = Vector2(220, 80)
 
-[sub_resource type="GDScript" id="GDScript_level_3"]
-script/source = "extends Node2D
-
-const HEALING_SCENE := preload(\"res://healing.tscn\")
-const END_SCREEN_PATH := \"res://EndScreen.tscn\"
-const HEALING_SLOT_XS := [760.0, 1120.0, 1480.0, 1840.0, 2200.0]
-const HEALING_GROUND_Y := 889.0
-const MIN_HEALING_SPAWNS := 1
-const MAX_HEALING_SPAWNS := 2
-const HEALING_X_JITTER := 55.0
-
-var boss_music_started := false
-var rng := RandomNumberGenerator.new()
-
-@onready var log_bridge: Node2D = $Log
-@onready var bridge_collision: CollisionShape2D = $Log/BridgeBody/CollisionShape2D
-@onready var birds_ambience: AudioStreamPlayer = $BirdsAmbience
-@onready var boss_music_1: AudioStreamPlayer = $BossMusic1
-@onready var boss_music_2: AudioStreamPlayer = $BossMusic2
-@onready var healing_spawns: Node2D = $HealingSpawns
-@onready var wolf: Node = $Wolf
-
-func _ready() -> void:
-\trng.randomize()
-\t_spawn_random_healing()
-\tif wolf != null and wolf.has_signal(\"boss_defeated\"):
-\t\twolf.connect(\"boss_defeated\", Callable(self, \"_on_wolf_boss_defeated\"), CONNECT_ONE_SHOT)
-
-func _process(_delta: float) -> void:
-\tif boss_music_started:
-\t\treturn
-\tif not bridge_collision.disabled and _has_log_fallen():
-\t\t_start_boss_music()
-
-func _has_log_fallen() -> bool:
-\tvar has_fallen_value: Variant = log_bridge.get(\"has_fallen\")
-\tif has_fallen_value is bool:
-\t\treturn has_fallen_value
-\treturn false
-
-func _start_boss_music() -> void:
-\tboss_music_started = true
-\tbirds_ambience.stop()
-\tboss_music_1.play()
-
-func _on_boss_music_1_finished() -> void:
-\tif boss_music_started:
-\t\tboss_music_2.play()
-
-func _on_wolf_boss_defeated() -> void:
-\tcall_deferred(\"_show_end_screen\")
-
-func _show_end_screen() -> void:
-\tget_tree().change_scene_to_file(END_SCREEN_PATH)
-
-func _spawn_random_healing() -> void:
-\tvar slot_xs: Array = HEALING_SLOT_XS.duplicate()
-\tslot_xs.shuffle()
-\tvar spawn_count := rng.randi_range(MIN_HEALING_SPAWNS, min(MAX_HEALING_SPAWNS, slot_xs.size()))
-
-\tfor i in range(spawn_count):
-\t\tvar healing_pickup := HEALING_SCENE.instantiate()
-\t\tvar spawn_x: float = float(slot_xs[i]) + rng.randf_range(-HEALING_X_JITTER, HEALING_X_JITTER)
-\t\thealing_pickup.position = Vector2(spawn_x, HEALING_GROUND_Y)
-\t\thealing_spawns.add_child(healing_pickup)
-"
-
 [node name="Level3" type="Node2D" unique_id=1608437808]
 script = SubResource("GDScript_level_3")
 
@@ -109,20 +152,31 @@ texture = ExtResource("1_16pka")
 
 [node name="BirdsAmbience" type="AudioStreamPlayer" parent="." unique_id=369245812]
 stream = ExtResource("6_ku4q1")
+volume_db = -12.0
 autoplay = true
 
 [node name="BossMusic1" type="AudioStreamPlayer" parent="." unique_id=1778213248]
 stream = ExtResource("8_ccfws")
+volume_db = -14.0
 
 [node name="BossMusic2" type="AudioStreamPlayer" parent="." unique_id=1347855321]
 stream = ExtResource("9_4mcji")
+volume_db = -14.0
+
+[node name="RiverAmbience" type="AudioStreamPlayer2D" parent="." unique_id=1435146158]
+position = Vector2(1955, 835)
+stream = ExtResource("10_sm2sm")
+volume_db = -8.0
+max_distance = 850.0
+attenuation = 2.5
+autoplay = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2087665207]
 position = Vector2(491, 344.99997)
 scale = Vector2(0.4581784, 0.38422135)
 
 [node name="Les_stena_1" type="CollisionShape2D" parent="StaticBody2D" unique_id=181286562]
-position = Vector2(7966.329, 275.88278)
+position = Vector2(7972.877, 304.51202)
 shape = SubResource("RectangleShape2D_j8bo8")
 
 [node name="Les_stena_2" type="CollisionShape2D" parent="StaticBody2D" unique_id=739779779]
@@ -139,10 +193,11 @@ scale = Vector2(2.182556, 2.6026664)
 shape = SubResource("SegmentShape2D_16pka")
 
 [node name="CharacterBody2D" parent="." unique_id=274477576 instance=ExtResource("2_16pka")]
-position = Vector2(1463, 858)
+position = Vector2(3602, 852)
 scale = Vector2(4, 4)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=823001870]
+visible = false
 position = Vector2(1, 2.75)
 scale = Vector2(0.25, 0.25)
 zoom = Vector2(0.8, 0.8)
@@ -206,3 +261,4 @@ layout_mode = 1
 layout_mode = 1
 
 [connection signal="finished" from="BossMusic1" to="." method="_on_boss_music_1_finished"]
+[connection signal="finished" from="RiverAmbience" to="." method="_on_river_ambience_finished"]

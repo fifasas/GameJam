@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://by1ryd3is1fre"
+path="res://.godot/imported/meow 5.mp3-159fc2f67d217cc82aa9d6038a26f455.mp3str"
+
+[deps]
+
+source_file="res://assets/Sounds/Meows/meow 5.mp3"
+dest_files=["res://.godot/imported/meow 5.mp3-159fc2f67d217cc82aa9d6038a26f455.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

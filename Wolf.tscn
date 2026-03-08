@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://c44yerhsar2cj" path="res://assets/animations/wolfsheet1.png" id="2_v6tq2"]
 [ext_resource type="Texture2D" uid="uid://drec4iwalfyjr" path="res://assets/animations/WOLFHOWL.png" id="3_en2fo"]
-[ext_resource type="AudioStream" path="res://assets/Sounds/wolf sound effect.mp3" id="4_h3k6u"]
-[ext_resource type="AudioStream" path="res://assets/Sounds/Wolf.mp3" id="5_whf4h"]
+[ext_resource type="AudioStream" uid="uid://cf4uwpv1rgina" path="res://assets/Sounds/wolf_howl.mp3" id="4_h3k6u"]
+[ext_resource type="AudioStream" uid="uid://c0cxg3l1qwfpn" path="res://assets/Sounds/Wolf.mp3" id="5_whf4h"]
 
 [sub_resource type="GDScript" id="GDScript_wolf_local"]
 script/source = "extends CharacterBody2D
@@ -53,7 +53,7 @@ var player_spotted := false
 @onready var attack_hit_timer: Timer = $AttackHitTimer
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var howl_cooldown_timer: Timer = $HowlCooldownTimer
-@onready var howl_audio: AudioStreamPlayer2D = $HowlAudio
+@onready var howl_audio: AudioStreamPlayer = $HowlAudio
 @onready var hurt_audio: AudioStreamPlayer2D = $HurtAudio
 
 func _ready() -> void:
@@ -302,9 +302,6 @@ func _reset_flash_after_delay(flash_id: int) -> void:
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_55onw"]
 size = Vector2(95, 115)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
-size = Vector2(270, 170)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_attack_0"]
 atlas = ExtResource("2_v6tq2")
 region = Rect2(320, 160, 64, 32)
@@ -423,6 +420,18 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vyeuo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyeuo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyeuo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyeuo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyeuo")
 }],
 "loop": false,
 "name": &"howl",
@@ -480,11 +489,13 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(270, 170)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
 size = Vector2(190, 130)
 
 [node name="Wolf" type="CharacterBody2D" unique_id=2094700935 groups=["enemy"]]
-collision_layer = 1
 collision_mask = 7
 script = SubResource("GDScript_wolf_local")
 
@@ -513,7 +524,6 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=45119116]
-position = Vector2(0, 0)
 shape = SubResource("RectangleShape2D_attack")
 
 [node name="AttackHitTimer" type="Timer" parent="." unique_id=1612868263]
@@ -528,11 +538,11 @@ one_shot = true
 wait_time = 4.0
 one_shot = true
 
-[node name="HowlAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="HowlAudio" type="AudioStreamPlayer" parent="." unique_id=1184608865]
 stream = ExtResource("4_h3k6u")
-volume_db = -4.0
+volume_db = 6.0
 
-[node name="HurtAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="HurtAudio" type="AudioStreamPlayer2D" parent="." unique_id=718071177]
 stream = ExtResource("5_whf4h")
 volume_db = -3.0
 
