@@ -23,11 +23,19 @@ const ATTACK_DAMAGE := 20
 const ATTACK_COOLDOWN := 1.1
 const ATTACK_HIT_DELAY := 0.3
 const HOWL_COOLDOWN := 4.0
-const PATROL_DISTANCE := 260.0
+const PATROL_DISTANCE := 520.0
+const WANDER_MIN_MOVE_TIME := 0.9
+const WANDER_MAX_MOVE_TIME := 2.3
+const WANDER_MIN_IDLE_TIME := 0.35
+const WANDER_MAX_IDLE_TIME := 1.0
+const WANDER_IDLE_CHANCE := 0.22
 const HIT_FLASH_DURATION := 0.2
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
 const KNOCKBACK_FORCE_X := 760.0
 const KNOCKBACK_FORCE_Y := -360.0
+const WALL_TURN_COOLDOWN := 0.18
+const WALL_TILT_DEGREES := 12.0
+const WALL_TILT_RECOVER_SPEED := 90.0
 
 enum State {
 	IDLE,
@@ -47,6 +55,11 @@ var facing_direction := 1
 var state := State.WALK
 var hit_flash_id := 0
 var player_spotted := false
+var patrol_timer := 0.0
+var patrol_idle := false
+var wall_turn_cooldown := 0.0
+var visual_tilt_degrees := 0.0
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
@@ -60,6 +73,8 @@ func _ready() -> void:
 	gravity = float(ProjectSettings.get_setting(\"physics/2d/default_gravity\"))
 	current_hp = clamp(current_hp, 0, max_hp)
 	spawn_x = global_position.x
+	rng.randomize()
+	_choose_next_patrol_action(true)
 	_update_facing()
 	_update_attack_area()
 	_update_animation()
@@ -73,6 +88,9 @@ func _physics_process(delta: float) -> void:
 	elif velocity.y > 0.0:
 		velocity.y = 0.0
 
+	if wall_turn_cooldown > 0.0:
+		wall_turn_cooldown = max(wall_turn_cooldown - delta, 0.0)
+
 	var player_target := _get_player_target()
 	var can_track := _can_track_player(player_target)
 
@@ -83,16 +101,17 @@ func _physics_process(delta: float) -> void:
 			_handle_player_tracking(player_target)
 		else:
 			player_spotted = false
-			_handle_patrol()
+			_handle_patrol(delta)
 
 	move_and_slide()
 
-	if state == State.WALK and is_on_wall():
-		patrol_direction *= -1
+	if state != State.ATTACK and state != State.HOWL and is_on_wall() and wall_turn_cooldown <= 0.0:
+		_handle_wall_turn()
 
 	_update_facing()
 	_update_attack_area()
 	_update_animation()
+	_update_visual_rotation(delta)
 
 func take_damage(amount: int) -> void:
 	if amount <= 0 or current_hp <= 0:
@@ -130,15 +149,65 @@ func _handle_player_tracking(player_target: CharacterBody2D) -> void:
 	state = State.RUN
 	velocity.x = sign(delta_x) * RUN_SPEED
 
-func _handle_patrol() -> void:
-	if global_position.x <= spawn_x - PATROL_DISTANCE:
-		patrol_direction = -1
-	elif global_position.x >= spawn_x + PATROL_DISTANCE:
-		patrol_direction = 1
+func _handle_patrol(delta: float) -> void:
+	patrol_timer = max(patrol_timer - delta, 0.0)
 
-	facing_direction = patrol_direction
+	var left_limit: float = spawn_x - PATROL_DISTANCE
+	var right_limit: float = spawn_x + PATROL_DISTANCE
+
+	if global_position.x <= left_limit:
+		_choose_next_patrol_action(true, 1)
+	elif global_position.x >= right_limit:
+		_choose_next_patrol_action(true, -1)
+	elif patrol_timer <= 0.0:
+		_choose_next_patrol_action()
+
+	if patrol_idle:
+		state = State.IDLE
+		velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * 4.0)
+		return
+
 	state = State.WALK
+	facing_direction = patrol_direction
 	velocity.x = patrol_direction * WALK_SPEED
+
+func _choose_next_patrol_action(force_walk: bool = false, forced_direction: int = 0) -> void:
+	var next_direction: int = forced_direction
+	if next_direction == 0:
+		next_direction = 1 if rng.randi_range(0, 1) == 0 else -1
+
+	var should_idle: bool = not force_walk and rng.randf() < WANDER_IDLE_CHANCE
+	if should_idle:
+		patrol_idle = true
+		patrol_timer = rng.randf_range(WANDER_MIN_IDLE_TIME, WANDER_MAX_IDLE_TIME)
+		velocity.x = 0.0
+		return
+
+	patrol_idle = false
+	patrol_direction = next_direction
+	facing_direction = patrol_direction
+	patrol_timer = rng.randf_range(WANDER_MIN_MOVE_TIME, WANDER_MAX_MOVE_TIME)
+
+func _handle_wall_turn() -> void:
+	var rebound_direction: int = -facing_direction
+
+	for collision_index in range(get_slide_collision_count()):
+		var collision: KinematicCollision2D = get_slide_collision(collision_index)
+		var wall_normal_x: float = collision.get_normal().x
+		if wall_normal_x > 0.05:
+			rebound_direction = 1
+			break
+		if wall_normal_x < -0.05:
+			rebound_direction = -1
+			break
+
+	patrol_direction = rebound_direction
+	facing_direction = patrol_direction
+	patrol_idle = false
+	patrol_timer = rng.randf_range(WANDER_MIN_MOVE_TIME, WANDER_MAX_MOVE_TIME)
+	velocity.x = patrol_direction * WALK_SPEED
+	wall_turn_cooldown = WALL_TURN_COOLDOWN
+	visual_tilt_degrees = WALL_TILT_DEGREES * float(-patrol_direction)
 
 func _start_howl() -> void:
 	if state == State.HOWL or state == State.ATTACK:
@@ -260,6 +329,10 @@ func _update_attack_area() -> void:
 func _update_facing() -> void:
 	# Otočení vizuálu spritu podle tvého požadavku
 	animated_sprite_2d.flip_h = facing_direction < 0
+
+func _update_visual_rotation(delta: float) -> void:
+	visual_tilt_degrees = move_toward(visual_tilt_degrees, 0.0, WALL_TILT_RECOVER_SPEED * delta)
+	animated_sprite_2d.rotation_degrees = visual_tilt_degrees
 
 func _update_animation() -> void:
 	match state:

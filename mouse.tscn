@@ -13,6 +13,7 @@ const CONTACT_DAMAGE := 10
 const DAMAGE_INTERVAL := 1.0
 const HIT_FLASH_DURATION := 0.3
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+const LIVE_SOUND: AudioStream = preload(\"res://assets/Sounds/mys pisk.mp3\")
 const DEATH_SOUND: AudioStream = preload(\"res://assets/Sounds/mys smrt.mp3\")
 
 @export_group(\"Visual Effects\")
@@ -30,9 +31,13 @@ var tracked_damage_target: Node = null
 @onready var ray_castleft: RayCast2D = $RayCastleft
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var damage_timer: Timer = $DamageTimer
+@onready var alive_sound_player: AudioStreamPlayer2D = $AliveSound
 
 func _ready() -> void:
 	current_hp = clamp(current_hp, 0, max_hp)
+	if is_instance_valid(alive_sound_player) and LIVE_SOUND != null:
+		alive_sound_player.stream = LIVE_SOUND
+		alive_sound_player.play()
 
 func _process(delta: float) -> void:
 	if ray_castright.is_colliding():
@@ -87,6 +92,12 @@ func _play_death_sound() -> void:
 	sound_player.global_position = global_position
 	sound_player.finished.connect(Callable(sound_player, \"queue_free\"))
 	sound_player.play()
+
+func _on_alive_sound_finished() -> void:
+	if current_hp <= 0 or not is_instance_valid(alive_sound_player):
+		return
+	if LIVE_SOUND != null:
+		alive_sound_player.play()
 
 func _on_damage_area_body_entered(body: Node2D) -> void:
 	if not _is_player_body(body):
@@ -221,6 +232,8 @@ shape = SubResource("CapsuleShape2D_qi2p4")
 
 [node name="DamageTimer" type="Timer" parent="." unique_id=1156119116]
 
+[node name="AliveSound" type="AudioStreamPlayer2D" parent="." unique_id=1342299886]
+
 [node name="RayCastright" type="RayCast2D" parent="." unique_id=1009754148]
 position = Vector2(14, 28)
 target_position = Vector2(37, 1)
@@ -231,4 +244,5 @@ target_position = Vector2(-37, 0)
 
 [connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]
 [connection signal="body_exited" from="DamageArea" to="." method="_on_damage_area_body_exited"]
+[connection signal="finished" from="AliveSound" to="." method="_on_alive_sound_finished"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_damage_timer_timeout"]
