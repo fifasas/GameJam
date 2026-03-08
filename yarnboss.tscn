@@ -42,7 +42,7 @@ animations = [{
 radius = 25.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_damage_area"]
-radius = 28.0
+radius = 42.0
 
 [sub_resource type="GDScript" id="GDScript_yarnboss"]
 script/source = "extends CharacterBody2D
@@ -63,6 +63,7 @@ var tracked_damage_target: Node = null
 var hit_flash_id := 0
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var damage_area: Area2D = $DamageArea
 @onready var damage_timer: Timer = $DamageTimer
 
 func _ready() -> void:
@@ -75,21 +76,16 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var collision := move_and_collide(velocity * delta)
 	if collision:
+		_try_start_contact_from_collider(collision.get_collider())
 		velocity = velocity.bounce(collision.get_normal())
-		move_and_collide(velocity * delta)
+		var bounce_collision: KinematicCollision2D = move_and_collide(velocity * delta)
+		if bounce_collision != null:
+			_try_start_contact_from_collider(bounce_collision.get_collider())
 		velocity = velocity.normalized() * SPEED
+	_refresh_damage_tracking()
 
 func _on_damage_area_body_entered(body: Node2D) -> void:
-	if not _is_player_body(body):
-		return
-
-	tracked_body = body
-	tracked_damage_target = _find_damage_target(body)
-	if tracked_damage_target == null:
-		return
-
-	_apply_contact_damage()
-	damage_timer.start(DAMAGE_INTERVAL)
+	_try_start_contact(body)
 
 func _on_damage_area_body_exited(body: Node2D) -> void:
 	if body != tracked_body:
@@ -153,6 +149,42 @@ func _clear_damage_tracking() -> void:
 	tracked_body = null
 	tracked_damage_target = null
 	damage_timer.stop()
+
+func _refresh_damage_tracking() -> void:
+	var overlapping_player: Node2D = _find_overlapping_player()
+	if overlapping_player != null:
+		_try_start_contact(overlapping_player)
+		return
+
+	if tracked_body != null and is_instance_valid(tracked_body):
+		_clear_damage_tracking()
+
+func _find_overlapping_player() -> Node2D:
+	for body in damage_area.get_overlapping_bodies():
+		if body is Node2D:
+			var player_body: Node2D = body
+			if _is_player_body(player_body):
+				return player_body
+	return null
+
+func _try_start_contact_from_collider(collider: Object) -> void:
+	if collider is Node2D:
+		var body: Node2D = collider
+		_try_start_contact(body)
+
+func _try_start_contact(body: Node2D) -> void:
+	if not _is_player_body(body):
+		return
+
+	tracked_body = body
+	tracked_damage_target = _find_damage_target(body)
+	if tracked_damage_target == null:
+		_clear_damage_tracking()
+		return
+
+	if damage_timer.is_stopped():
+		_apply_contact_damage()
+		damage_timer.start(DAMAGE_INTERVAL)
 
 func _is_player_body(body: Node2D) -> bool:
 	if body.is_in_group(\"player\"):
