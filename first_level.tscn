@@ -7,11 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="6_igtk7"]
 [ext_resource type="Texture2D" uid="uid://qcmljy1av1t5" path="res://assets/animations/arrow_sheet.png" id="7_5jff8"]
 [ext_resource type="AudioStream" uid="uid://dtbtxv6qaqdn4" path="res://assets/Tiny Swords (Free Pack)/Particle FX/mouse (online-audio-converter.com) (1).mp3" id="7_ehg42"]
+[ext_resource type="Texture2D" uid="uid://b7rg3xevkooc" path="res://assets/klubko.png" id="8_ehg42"]
 
 [sub_resource type="GDScript" id="GDScript_first_level_local"]
 script/source = "extends Node2D
 
 const NEXT_LEVEL_PATH := \"res://level_2.tscn\"
+const LEVEL_2_UNLOCKED_KEY := &\"level_2_unlocked\"
 
 var boss_defeated := false
 var player_in_exit_zone := false
@@ -30,6 +32,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_mouse_boss_defeated() -> void:
 	boss_defeated = true
+	get_tree().set_meta(LEVEL_2_UNLOCKED_KEY, true)
 	_update_exit_guidance()
 
 func _on_exit_zone_body_entered(body: Node2D) -> void:
@@ -604,6 +607,11 @@ position = Vector2(437, 823)
 stream = ExtResource("7_ehg42")
 volume_db = -16.0
 autoplay = true
+
+[node name="Klubko" type="Sprite2D" parent="." unique_id=1866572691]
+position = Vector2(1214, 626)
+scale = Vector2(0.0286885, 0.028688505)
+texture = ExtResource("8_ehg42")
 
 [connection signal="boss_defeated" from="mouse" to="." method="_on_mouse_boss_defeated"]
 [connection signal="body_entered" from="ExitZone" to="." method="_on_exit_zone_body_entered"]

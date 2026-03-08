@@ -1,6 +1,5 @@
 extends Control
 
-const LEVEL_RESTART_PATH := "res://level_3.tscn"
 const LOBBY_PATH := "res://living_room.tscn"
 const HEALTH_META_KEY := &"player_saved_health"
 
@@ -10,7 +9,7 @@ func _ready() -> void:
 
 func _on_restart_pressed() -> void:
 	_clear_saved_health()
-	get_tree().change_scene_to_file(LEVEL_RESTART_PATH)
+	get_tree().change_scene_to_file(LOBBY_PATH)
 
 func _on_lobby_pressed() -> void:
 	_clear_saved_health()

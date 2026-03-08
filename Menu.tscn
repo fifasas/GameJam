@@ -45,7 +45,7 @@
 [ext_resource type="Texture2D" uid="uid://bafjh320wj7bm" path="res://assets/backgrounds/main_menu/ezgif-frame-039.jpg" id="43_767mb"]
 [ext_resource type="Texture2D" uid="uid://d25ke0oc3ehix" path="res://assets/backgrounds/main_menu/ezgif-frame-040.jpg" id="44_557pi"]
 [ext_resource type="Texture2D" uid="uid://t76nf8suhpkl" path="res://assets/AllCatsDemo/White/IdleCatttt.png" id="45_x4abi"]
-[ext_resource type="AudioStream" uid="uid://cx5ufqpojujip" path="res://assets/brackeys_platformer_assets/music/time_for_adventure.mp3" id="46_x4abi"]
+[ext_resource type="AudioStream" path="res://assets/Sounds/Music/mouse (online-audio-converter.com).mp3" id="46_x4abi"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_75wuu"]
 animations = [{

@@ -19,8 +19,8 @@ const BOSS_REBOUND_SPEED := 430.0
 @export var death_effect_scene: PackedScene
 # ------------------------------
 
-@export_range(1, 9999, 1) var max_hp: int = 20
-@export_range(0, 9999, 1) var current_hp: int = 20
+@export_range(1, 9999, 1) var max_hp: int = 10
+@export_range(0, 9999, 1) var current_hp: int = 10
 
 var tracked_body: Node2D = null
 var tracked_damage_target: Node = null

@@ -12,17 +12,15 @@ config_version=5
 
 config/name="CatJam"
 config/version="1.0.1"
-run/main_scene="uid://dvj648prwb6g7"
+run/main_scene="res://loadingscreen.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="uid://c851a0gs64fox"
+config/icon="res://icon.svg"
 
 [audio]
 
-buses/default_bus_layout="uid://bd4dmwkafpmr"
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [autoload]
-
-EndScreen="*uid://712mkpbmdfwc"
 
 [display]
 
