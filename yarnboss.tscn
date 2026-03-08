@@ -2,58 +2,17 @@
 
 [ext_resource type="Texture2D" uid="uid://b3xbglo6k1tr" path="res://assets/animations/klubko_1.png" id="2_e37tb"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ibeeu"]
-atlas = ExtResource("2_e37tb")
-region = Rect2(0, 0, 64, 58)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_okw6n"]
-atlas = ExtResource("2_e37tb")
-region = Rect2(64, 0, 64, 58)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bay5w"]
-atlas = ExtResource("2_e37tb")
-region = Rect2(128, 0, 64, 58)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7renj"]
-atlas = ExtResource("2_e37tb")
-region = Rect2(192, 0, 64, 58)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_tc7rl"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ibeeu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_okw6n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bay5w")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7renj")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_en4gc"]
-radius = 25.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_damage_area"]
-radius = 42.0
-
 [sub_resource type="GDScript" id="GDScript_yarnboss"]
 script/source = "extends CharacterBody2D
 
 const SPEED := 400.0
 const CONTACT_DAMAGE := 15
-const DAMAGE_INTERVAL := 1.0
+const DAMAGE_INTERVAL := 0.3
 const HIT_FLASH_DURATION := 0.2
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
 const KNOCKBACK_FORCE_X := 820.0
 const KNOCKBACK_FORCE_Y := -360.0
+const BOSS_REBOUND_SPEED := 430.0
 
 @export_range(1, 9999, 1) var max_hp: int = 20
 @export_range(0, 9999, 1) var current_hp: int = 20
@@ -122,6 +81,7 @@ func _apply_contact_damage() -> void:
 		tracked_damage_target.set_health(tracked_damage_target.current_hp - CONTACT_DAMAGE)
 
 	_apply_knockback()
+	_rebound_from_target()
 
 func _apply_knockback() -> void:
 	if tracked_body == null or not is_instance_valid(tracked_body):
@@ -144,6 +104,22 @@ func _apply_knockback() -> void:
 
 	target_body.velocity.x = knockback_direction * KNOCKBACK_FORCE_X
 	target_body.velocity.y = min(target_body.velocity.y, KNOCKBACK_FORCE_Y)
+
+func _rebound_from_target() -> void:
+	if tracked_body == null or not is_instance_valid(tracked_body):
+		return
+
+	var target_position: Vector2 = tracked_body.global_position
+	if tracked_body.get_parent() is Node2D:
+		target_position = tracked_body.get_parent().global_position
+
+	var away_direction: Vector2 = global_position - target_position
+	if away_direction.length_squared() <= 0.001:
+		away_direction = -velocity
+	if away_direction.length_squared() <= 0.001:
+		away_direction = Vector2.LEFT
+
+	velocity = away_direction.normalized() * BOSS_REBOUND_SPEED
 
 func _clear_damage_tracking() -> void:
 	tracked_body = null
@@ -221,6 +197,48 @@ func _reset_flash_after_delay(flash_id: int) -> void:
 	animated_sprite_2d.modulate = Color(1.0, 1.0, 1.0, 1.0)
 "
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibeeu"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(0, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_okw6n"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(64, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bay5w"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(128, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7renj"]
+atlas = ExtResource("2_e37tb")
+region = Rect2(192, 0, 64, 58)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tc7rl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ibeeu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_okw6n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bay5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7renj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_en4gc"]
+radius = 31.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_damage_area"]
+radius = 52.0
+
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=566931756 groups=["enemy"]]
 motion_mode = 1
 script = SubResource("GDScript_yarnboss")
@@ -235,14 +253,14 @@ frame_progress = 0.4166169
 position = Vector2(1, 0)
 shape = SubResource("CircleShape2D_en4gc")
 
-[node name="DamageArea" type="Area2D" parent="."]
+[node name="DamageArea" type="Area2D" parent="." unique_id=411657808]
+collision_layer = 0
 collision_mask = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea" unique_id=859222083]
 shape = SubResource("CircleShape2D_damage_area")
 
-[node name="DamageTimer" type="Timer" parent="."]
-wait_time = 1.0
+[node name="DamageTimer" type="Timer" parent="." unique_id=2081245786]
 
 [connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]
 [connection signal="body_exited" from="DamageArea" to="." method="_on_damage_area_body_exited"]
