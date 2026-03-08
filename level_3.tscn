@@ -3,8 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://dor378g4rxj4" path="res://assets/backgrounds/Background_forest.png" id="1_16pka"]
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_16pka"]
 [ext_resource type="PackedScene" uid="uid://bwkftu58bahr2" path="res://Wolf.tscn" id="3_d8m5v"]
-[ext_resource type="Script" path="res://scripts/log_bridge.gd" id="4_m3kpu"]
+[ext_resource type="Script" uid="uid://bksme736205ho" path="res://scripts/log_bridge.gd" id="4_m3kpu"]
 [ext_resource type="Texture2D" uid="uid://cucktbpvrfh8x" path="res://assets/log.png" id="5_6j7h5"]
+[ext_resource type="AudioStream" uid="uid://dexr7mo055imp" path="res://assets/Sounds/Birds.mp3" id="6_ku4q1"]
+[ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="7_5mtt0"]
+[ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="7_7ds5r"]
+[ext_resource type="AudioStream" uid="uid://d1vhxqpf6klw6" path="res://assets/brackeys_platformer_assets/music/Boss_music_1.mp3" id="8_ccfws"]
+[ext_resource type="AudioStream" uid="uid://dqhf0nerr0gtx" path="res://assets/brackeys_platformer_assets/music/Boss_music_2.mp3" id="9_4mcji"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
 size = Vector2(1428.0261, 2477.6357)
@@ -26,13 +31,57 @@ height = 310.67334
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wj7gw"]
 size = Vector2(220, 80)
 
+[sub_resource type="GDScript" id="GDScript_level_3"]
+script/source = "extends Node2D
+
+var boss_music_started := false
+
+@onready var log_bridge: Node2D = $Log
+@onready var bridge_collision: CollisionShape2D = $Log/BridgeBody/CollisionShape2D
+@onready var birds_ambience: AudioStreamPlayer = $BirdsAmbience
+@onready var boss_music_1: AudioStreamPlayer = $BossMusic1
+@onready var boss_music_2: AudioStreamPlayer = $BossMusic2
+
+func _process(_delta: float) -> void:
+\tif boss_music_started:
+\t\treturn
+\tif not bridge_collision.disabled and _has_log_fallen():
+\t\t_start_boss_music()
+
+func _has_log_fallen() -> bool:
+\tvar has_fallen_value: Variant = log_bridge.get(\"has_fallen\")
+\tif has_fallen_value is bool:
+\t\treturn has_fallen_value
+\treturn false
+
+func _start_boss_music() -> void:
+\tboss_music_started = true
+\tbirds_ambience.stop()
+\tboss_music_1.play()
+
+func _on_boss_music_1_finished() -> void:
+\tif boss_music_started:
+\t\tboss_music_2.play()
+"
+
 [node name="Level3" type="Node2D" unique_id=1608437808]
+script = SubResource("GDScript_level_3")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=902534777]
 
 [node name="BackgroundForest" type="Sprite2D" parent="." unique_id=2008097049]
 position = Vector2(1955, 541)
 texture = ExtResource("1_16pka")
+
+[node name="BirdsAmbience" type="AudioStreamPlayer" parent="." unique_id=369245812]
+stream = ExtResource("6_ku4q1")
+autoplay = true
+
+[node name="BossMusic1" type="AudioStreamPlayer" parent="." unique_id=1778213248]
+stream = ExtResource("8_ccfws")
+
+[node name="BossMusic2" type="AudioStreamPlayer" parent="." unique_id=1347855321]
+stream = ExtResource("9_4mcji")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2087665207]
 position = Vector2(491, 344.99997)
@@ -50,7 +99,7 @@ shape = SubResource("RectangleShape2D_j8bo8")
 position = Vector2(-1185.1279, -7.807933)
 shape = SubResource("SegmentShape2D_1jdk1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1372165533]
+[node name="Les_Podlaha 2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1372165533]
 position = Vector2(-1071.635, -897.9198)
 scale = Vector2(2.182556, 2.6026664)
 shape = SubResource("SegmentShape2D_16pka")
@@ -103,3 +152,21 @@ position = Vector2(-2.1253097, 23.926619)
 shape = SubResource("RectangleShape2D_wj7gw")
 
 [node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1281624546]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=130833644]
+
+[node name="Screen" type="Control" parent="HUD" unique_id=1266612407]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CatUi" parent="HUD/Screen" unique_id=1884414998 instance=ExtResource("7_7ds5r")]
+layout_mode = 1
+
+[node name="IngameMenu" parent="HUD/Screen" unique_id=1114433287 instance=ExtResource("7_5mtt0")]
+layout_mode = 1
+
+[connection signal="finished" from="BossMusic1" to="." method="_on_boss_music_1_finished"]

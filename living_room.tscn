@@ -82,9 +82,6 @@ label_settings = SubResource("LabelSettings_prompt")
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="IngameMenu" parent="HUD/Screen" unique_id=60306681 instance=ExtResource("3_ingame")]
-layout_mode = 1
-
 [node name="Screen2" type="Control" parent="HUD" unique_id=107433214]
 layout_mode = 3
 anchors_preset = 15
@@ -107,6 +104,9 @@ offset_bottom = -36.0
 label_settings = SubResource("LabelSettings_prompt")
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="IngameMenu" parent="HUD/Screen2" unique_id=60306681 instance=ExtResource("3_ingame")]
+layout_mode = 1
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1924035617]
 
