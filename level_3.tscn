@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="7_7ds5r"]
 [ext_resource type="AudioStream" uid="uid://csbf8wvvsvlwh" path="res://assets/brackeys_platformer_assets/music/Boss_music_1.mp3" id="8_ccfws"]
 [ext_resource type="AudioStream" uid="uid://be4bth7gao4qx" path="res://assets/brackeys_platformer_assets/music/Boss_music_2.mp3" id="9_4mcji"]
-[ext_resource type="AudioStream" uid="uid://dow04mycbt5pv" path="res://assets/Sounds/Rieka.mp3" id="10_sm2sm"]
+[ext_resource type="AudioStream" uid="uid://cc5wsntoe00i6" path="res://assets/Sounds/Rieka.mp3" id="10_sm2sm"]
 
 [sub_resource type="GDScript" id="GDScript_level_3"]
 script/source = "extends Node2D
@@ -43,14 +43,14 @@ var rng := RandomNumberGenerator.new()
 @onready var wolf_sprite: AnimatedSprite2D = $Wolf/AnimatedSprite2D
 
 func _ready() -> void:
-\tif _consume_pending_death_screen():
-\t\tcall_deferred(\"_show_death_screen\")
-\t\treturn
+	if _consume_pending_death_screen():
+		call_deferred(\"_show_death_screen\")
+		return
 	rng.randomize()
 	_lock_wolf_until_log_drops()
 	_spawn_random_healing()
-\tif healthbar != null and healthbar.has_signal(\"health_depleted\"):
-\t\thealthbar.connect(\"health_depleted\", Callable(self, \"_on_health_depleted\"), CONNECT_ONE_SHOT)
+	if healthbar != null and healthbar.has_signal(\"health_depleted\"):
+		healthbar.connect(\"health_depleted\", Callable(self, \"_on_health_depleted\"), CONNECT_ONE_SHOT)
 	if wolf != null and wolf.has_signal(\"boss_defeated\"):
 		wolf.connect(\"boss_defeated\", Callable(self, \"_on_wolf_boss_defeated\"), CONNECT_ONE_SHOT)
 
@@ -77,17 +77,17 @@ func _on_boss_music_1_finished() -> void:
 		boss_music_2.play()
 
 func _on_health_depleted() -> void:
-\tget_tree().set_meta(DEATH_SCREEN_PENDING_KEY, true)
+	get_tree().set_meta(DEATH_SCREEN_PENDING_KEY, true)
 
 func _consume_pending_death_screen() -> bool:
-\tif not get_tree().has_meta(DEATH_SCREEN_PENDING_KEY):
-\t\treturn false
-\tvar should_show: bool = bool(get_tree().get_meta(DEATH_SCREEN_PENDING_KEY))
-\tget_tree().remove_meta(DEATH_SCREEN_PENDING_KEY)
-\treturn should_show
+	if not get_tree().has_meta(DEATH_SCREEN_PENDING_KEY):
+		return false
+	var should_show: bool = bool(get_tree().get_meta(DEATH_SCREEN_PENDING_KEY))
+	get_tree().remove_meta(DEATH_SCREEN_PENDING_KEY)
+	return should_show
 
 func _show_death_screen() -> void:
-\tget_tree().change_scene_to_file(DEATH_SCREEN_PATH)
+	get_tree().change_scene_to_file(DEATH_SCREEN_PATH)
 
 func _on_river_ambience_finished() -> void:
 	if is_instance_valid(river_ambience):
@@ -202,9 +202,9 @@ volume_db = -14.0
 position = Vector2(1955, 835)
 stream = ExtResource("10_sm2sm")
 volume_db = -8.0
+autoplay = true
 max_distance = 850.0
 attenuation = 2.5
-autoplay = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2087665207]
 position = Vector2(491, 344.99997)

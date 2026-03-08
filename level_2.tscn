@@ -26,11 +26,11 @@ var player_in_exit_zone := false
 @onready var healthbar: Node = $HUD/Screen/CatUi/Healthbar
 
 func _ready() -> void:
-\tif _consume_pending_death_screen():
-\t\tcall_deferred(\"_show_death_screen\")
-\t\treturn
-\tif healthbar != null and healthbar.has_signal(\"health_depleted\"):
-\t\thealthbar.connect(\"health_depleted\", Callable(self, \"_on_health_depleted\"), CONNECT_ONE_SHOT)
+	if _consume_pending_death_screen():
+		call_deferred(\"_show_death_screen\")
+		return
+	if healthbar != null and healthbar.has_signal(\"health_depleted\"):
+		healthbar.connect(\"health_depleted\", Callable(self, \"_on_health_depleted\"), CONNECT_ONE_SHOT)
 	if yarnboss != null:
 		yarnboss.tree_exited.connect(_on_yarnboss_tree_exited, CONNECT_ONE_SHOT)
 	_update_exit_guidance()
@@ -59,17 +59,17 @@ func _on_exit_square_body_exited(body: Node2D) -> void:
 	_update_exit_guidance()
 
 func _on_health_depleted() -> void:
-\tget_tree().set_meta(DEATH_SCREEN_PENDING_KEY, true)
+	get_tree().set_meta(DEATH_SCREEN_PENDING_KEY, true)
 
 func _consume_pending_death_screen() -> bool:
-\tif not get_tree().has_meta(DEATH_SCREEN_PENDING_KEY):
-\t\treturn false
-\tvar should_show: bool = bool(get_tree().get_meta(DEATH_SCREEN_PENDING_KEY))
-\tget_tree().remove_meta(DEATH_SCREEN_PENDING_KEY)
-\treturn should_show
+	if not get_tree().has_meta(DEATH_SCREEN_PENDING_KEY):
+		return false
+	var should_show: bool = bool(get_tree().get_meta(DEATH_SCREEN_PENDING_KEY))
+	get_tree().remove_meta(DEATH_SCREEN_PENDING_KEY)
+	return should_show
 
 func _show_death_screen() -> void:
-\tget_tree().change_scene_to_file(DEATH_SCREEN_PATH)
+	get_tree().change_scene_to_file(DEATH_SCREEN_PATH)
 
 func _update_exit_guidance() -> void:
 	arrow_1.visible = boss_defeated
