@@ -19,6 +19,13 @@ const DROP_THROUGH_LAYER := 2
 const DROP_THROUGH_DURATION := 0.2
 const HIT_FLASH_DURATION := 0.2
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+const HEALTH_META_KEY := &\"player_saved_health\"
+const GAMEPLAY_SCENE_PATHS := [\"res://first_level.tscn\", \"res://level_2.tscn\", \"res://level_3.tscn\"]
+const ATTACK_SOUNDS: Array[AudioStream] = [
+\tpreload(\"res://assets/Sounds/Meow-low.mp3\"),
+\tpreload(\"res://assets/Sounds/Meow-high.mp3\"),
+\tpreload(\"res://assets/Sounds/Meow - mid.mp3\")
+]
 
 @export_range(1, 9999, 1) var max_hp: int = 100
 @export_range(0, 9999, 1) var current_hp: int = 100
@@ -29,14 +36,17 @@ var is_dropping_through := false
 var is_sprinting := false
 var healthbar: Node = null
 var hit_flash_id := 0
+var rng := RandomNumberGenerator.new()
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
+@onready var attack_sound_player: AudioStreamPlayer = $AttackSoundPlayer
 @onready var hit_sound_player: AudioStreamPlayer = $HitSoundPlayer
 
 func _ready() -> void:
-	current_hp = clamp(current_hp, 0, max_hp)
+\trng.randomize()
+	_restore_persistent_health()
 	healthbar = _find_healthbar()
 	_setup_healthbar()
 	_sync_healthbar()
@@ -80,10 +90,12 @@ func damage(amount: int) -> void:
 
 	var previous_hp := current_hp
 	current_hp = max(current_hp - amount, 0)
+	_store_persistent_health()
 	if current_hp < previous_hp:
 		_flash_hit()
 	_sync_healthbar()
 	if current_hp == 0:
+		_clear_persistent_health()
 		get_tree().reload_current_scene()
 
 func heal(amount: int) -> void:
@@ -91,19 +103,23 @@ func heal(amount: int) -> void:
 		return
 
 	current_hp = clamp(current_hp + amount, 0, max_hp)
+	_store_persistent_health()
 	_sync_healthbar()
 
 func set_health(new_health: int) -> void:
 	var previous_hp := current_hp
 	current_hp = clamp(new_health, 0, max_hp)
+	_store_persistent_health()
 	if current_hp < previous_hp:
 		_flash_hit()
 	_sync_healthbar()
 	if current_hp == 0:
+		_clear_persistent_health()
 		get_tree().reload_current_scene()
 
 func reset_health() -> void:
 	current_hp = max_hp
+	_store_persistent_health()
 	_sync_healthbar()
 
 func is_dead() -> bool:
@@ -116,6 +132,7 @@ func _try_attack() -> void:
 	is_attacking = true
 	attack_cooldown_timer.start(ATTACK_COOLDOWN)
 	animated_sprite_2d.play(\"attack\")
+	_play_attack_sound()
 	_update_attack_area()
 	call_deferred(\"_perform_attack_hit\")
 
@@ -185,6 +202,32 @@ func _find_healthbar() -> Node:
 		found_healthbar = current_scene.find_child(\"healthbar\", true, false)
 	return found_healthbar
 
+func _restore_persistent_health() -> void:
+	if not _is_gameplay_scene():
+		current_hp = max_hp
+		_clear_persistent_health()
+		return
+
+	if get_tree().has_meta(HEALTH_META_KEY):
+		current_hp = clamp(int(get_tree().get_meta(HEALTH_META_KEY)), 0, max_hp)
+	else:
+		current_hp = clamp(current_hp, 0, max_hp)
+	_store_persistent_health()
+
+func _store_persistent_health() -> void:
+	if _is_gameplay_scene():
+		get_tree().set_meta(HEALTH_META_KEY, current_hp)
+
+func _clear_persistent_health() -> void:
+	if get_tree().has_meta(HEALTH_META_KEY):
+		get_tree().remove_meta(HEALTH_META_KEY)
+
+func _is_gameplay_scene() -> bool:
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return false
+	return GAMEPLAY_SCENE_PATHS.has(current_scene.scene_file_path)
+
 func _setup_healthbar() -> void:
 	if healthbar == null:
 		return
@@ -216,6 +259,13 @@ func _play_hit_sound() -> void:
 		return
 	hit_sound_player.stop()
 	hit_sound_player.play()
+
+func _play_attack_sound() -> void:
+\tif not is_instance_valid(attack_sound_player) or ATTACK_SOUNDS.is_empty():
+\t\treturn
+\tattack_sound_player.stop()
+\tattack_sound_player.stream = ATTACK_SOUNDS[rng.randi_range(0, ATTACK_SOUNDS.size() - 1)]
+\tattack_sound_player.play()
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvl01"]
@@ -549,6 +599,8 @@ shape = SubResource("RectangleShape2D_attack")
 
 [node name="AttackCooldownTimer" type="Timer" parent="." unique_id=1013622247]
 one_shot = true
+
+[node name="AttackSoundPlayer" type="AudioStreamPlayer" parent="." unique_id=873461902]
 
 [node name="HitSoundPlayer" type="AudioStreamPlayer" parent="." unique_id=1481798033]
 stream = ExtResource("6_2k0jr")

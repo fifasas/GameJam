@@ -63,11 +63,34 @@ corner_radius_bottom_left = 16
 shadow_color = Color(0, 0, 0, 0.25)
 shadow_size = 6
 
-[node name="EndScreen" type="Node2D" unique_id=1154376755]
-position = Vector2(424, 199)
+[node name="EndScreen" type="Control" unique_id=1154376755]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ekb8w")
 
+[node name="Backdrop" type="ColorRect" parent="." unique_id=622335921]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0352941, 0.0352941, 0.0431373, 0.74)
+
 [node name="ButtonsCard" type="PanelContainer" parent="." unique_id=1905414479]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -263.0
+offset_top = -174.0
+offset_right = 263.0
+offset_bottom = 174.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_lmk8k")
 
 [node name="ButtonsPadding" type="MarginContainer" parent="ButtonsCard" unique_id=1809142301]
@@ -119,3 +142,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_adxjw")
 theme_override_styles/hover = SubResource("StyleBoxFlat_7j885")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7j885")
 text = "QUIT"
+
+[connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/Lobby" to="." method="_on_lobby_pressed"]
+[connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/Quit" to="." method="_on_quit_pressed"]

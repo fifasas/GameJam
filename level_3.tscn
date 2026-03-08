@@ -34,13 +34,30 @@ size = Vector2(220, 80)
 [sub_resource type="GDScript" id="GDScript_level_3"]
 script/source = "extends Node2D
 
+const HEALING_SCENE := preload(\"res://healing.tscn\")
+const END_SCREEN_PATH := \"res://EndScreen.tscn\"
+const HEALING_SLOT_XS := [760.0, 1120.0, 1480.0, 1840.0, 2200.0]
+const HEALING_GROUND_Y := 889.0
+const MIN_HEALING_SPAWNS := 1
+const MAX_HEALING_SPAWNS := 2
+const HEALING_X_JITTER := 55.0
+
 var boss_music_started := false
+var rng := RandomNumberGenerator.new()
 
 @onready var log_bridge: Node2D = $Log
 @onready var bridge_collision: CollisionShape2D = $Log/BridgeBody/CollisionShape2D
 @onready var birds_ambience: AudioStreamPlayer = $BirdsAmbience
 @onready var boss_music_1: AudioStreamPlayer = $BossMusic1
 @onready var boss_music_2: AudioStreamPlayer = $BossMusic2
+@onready var healing_spawns: Node2D = $HealingSpawns
+@onready var wolf: Node = $Wolf
+
+func _ready() -> void:
+\trng.randomize()
+\t_spawn_random_healing()
+\tif wolf != null and wolf.has_signal(\"boss_defeated\"):
+\t\twolf.connect(\"boss_defeated\", Callable(self, \"_on_wolf_boss_defeated\"), CONNECT_ONE_SHOT)
 
 func _process(_delta: float) -> void:
 \tif boss_music_started:
@@ -62,6 +79,23 @@ func _start_boss_music() -> void:
 func _on_boss_music_1_finished() -> void:
 \tif boss_music_started:
 \t\tboss_music_2.play()
+
+func _on_wolf_boss_defeated() -> void:
+\tcall_deferred(\"_show_end_screen\")
+
+func _show_end_screen() -> void:
+\tget_tree().change_scene_to_file(END_SCREEN_PATH)
+
+func _spawn_random_healing() -> void:
+\tvar slot_xs: Array = HEALING_SLOT_XS.duplicate()
+\tslot_xs.shuffle()
+\tvar spawn_count := rng.randi_range(MIN_HEALING_SPAWNS, min(MAX_HEALING_SPAWNS, slot_xs.size()))
+
+\tfor i in range(spawn_count):
+\t\tvar healing_pickup := HEALING_SCENE.instantiate()
+\t\tvar spawn_x: float = float(slot_xs[i]) + rng.randf_range(-HEALING_X_JITTER, HEALING_X_JITTER)
+\t\thealing_pickup.position = Vector2(spawn_x, HEALING_GROUND_Y)
+\t\thealing_spawns.add_child(healing_pickup)
 "
 
 [node name="Level3" type="Node2D" unique_id=1608437808]
@@ -152,6 +186,8 @@ position = Vector2(-2.1253097, 23.926619)
 shape = SubResource("RectangleShape2D_wj7gw")
 
 [node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1281624546]
+
+[node name="HealingSpawns" type="Node2D" parent="." unique_id=321885197]
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=130833644]
 

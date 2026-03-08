@@ -506,7 +506,7 @@ theme_override_constants/margin_bottom = 14
 
 [node name="Hint" type="Label" parent="HUD/Screen/Margin/HudStack/HintCard/HintPadding" unique_id=1066844829]
 layout_mode = 2
-text = "Use W, S, A, D or Arrows for movement
+text = "Use W, S, A, D or Arrows for movement, SHIFT to run
 To JUMP use Space or W
 Use LMB for attack
 Press S or Down to drop through thin platforms"

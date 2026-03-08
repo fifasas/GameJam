@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="2_xdadj"]
 [ext_resource type="PackedScene" uid="uid://bfybwafhgspqa" path="res://healing.tscn" id="3_7j8ne"]
 [ext_resource type="PackedScene" uid="uid://cevx03ll33d0c" path="res://yarnboss.tscn" id="3_xdadj"]
-[ext_resource type="PackedScene" path="res://Ingame menu.tscn" id="4_hk1x8"]
+[ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="4_hk1x8"]
 [ext_resource type="PackedScene" uid="uid://b5py8me4awa0t" path="res://CatUI.tscn" id="4_t5a6v"]
 [ext_resource type="Texture2D" uid="uid://qcmljy1av1t5" path="res://assets/animations/arrow_sheet.png" id="7_7j8ne"]
 

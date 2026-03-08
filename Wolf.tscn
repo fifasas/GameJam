@@ -26,8 +26,8 @@ const HOWL_COOLDOWN := 4.0
 const PATROL_DISTANCE := 260.0
 const HIT_FLASH_DURATION := 0.2
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
-const KNOCKBACK_FORCE_X := 520.0
-const KNOCKBACK_FORCE_Y := -260.0
+const KNOCKBACK_FORCE_X := 760.0
+const KNOCKBACK_FORCE_Y := -360.0
 
 enum State {
 	IDLE,
