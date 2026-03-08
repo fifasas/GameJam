@@ -45,6 +45,7 @@
 [ext_resource type="Texture2D" uid="uid://bafjh320wj7bm" path="res://assets/backgrounds/main_menu/ezgif-frame-039.jpg" id="43_767mb"]
 [ext_resource type="Texture2D" uid="uid://d25ke0oc3ehix" path="res://assets/backgrounds/main_menu/ezgif-frame-040.jpg" id="44_557pi"]
 [ext_resource type="Texture2D" uid="uid://t76nf8suhpkl" path="res://assets/AllCatsDemo/White/IdleCatttt.png" id="45_x4abi"]
+[ext_resource type="AudioStream" uid="uid://cx5ufqpojujip" path="res://assets/brackeys_platformer_assets/music/time_for_adventure.mp3" id="46_x4abi"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_75wuu"]
 animations = [{
@@ -720,6 +721,12 @@ sprite_frames = SubResource("SpriteFrames_lyyg7")
 autoplay = "default"
 frame_progress = 0.9456162
 speed_scale = 2.0
+
+[node name="TimeForAdventure" type="AudioStreamPlayer2D" parent="." unique_id=345398502]
+position = Vector2(-39, 432)
+stream = ExtResource("46_x4abi")
+autoplay = true
+panning_strength = 0.0
 
 [connection signal="timeout" from="Screen/ShowTimer" to="Screen/MenuCenter" method="_on_timer_timeout"]
 [connection signal="pressed" from="Screen/MenuCenter/MenuStack/ButtonsCard/ButtonsPadding/ButtonsColumn/StartButton" to="Screen/MenuCenter" method="_on_start_button_pressed"]

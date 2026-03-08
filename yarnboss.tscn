@@ -14,6 +14,11 @@ const KNOCKBACK_FORCE_X := 820.0
 const KNOCKBACK_FORCE_Y := -360.0
 const BOSS_REBOUND_SPEED := 430.0
 
+# --- PŘIDANÝ KÓD PRO ČÁSTICE ---
+@export_group(\"Visual Effects\")
+@export var death_effect_scene: PackedScene
+# ------------------------------
+
 @export_range(1, 9999, 1) var max_hp: int = 20
 @export_range(0, 9999, 1) var current_hp: int = 20
 
@@ -43,82 +48,92 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.normalized() * SPEED
 	_refresh_damage_tracking()
 
-func _on_damage_area_body_entered(body: Node2D) -> void:
-	_try_start_contact(body)
-
-func _on_damage_area_body_exited(body: Node2D) -> void:
-	if body != tracked_body:
-		return
-
-	_clear_damage_tracking()
-
-func _on_damage_timer_timeout() -> void:
-	if tracked_body == null or not is_instance_valid(tracked_body):
-		_clear_damage_tracking()
-		return
-
-	if tracked_damage_target == null or not is_instance_valid(tracked_damage_target):
-		tracked_damage_target = _find_damage_target(tracked_body)
-		if tracked_damage_target == null:
-			_clear_damage_tracking()
-			return
-
-	_apply_contact_damage()
-
 func take_damage(amount: int) -> void:
 	if amount <= 0 or current_hp <= 0:
 		return
 
 	current_hp = max(current_hp - amount, 0)
 	_flash_hit()
+	
 	if current_hp == 0:
+		_spawn_death_vfx() # ZAVOLÁNÍ EFEKTU PŘI SMRTI
 		queue_free()
+
+# --- PŘIDANÁ FUNKCE PRO EFEKT ---
+func _spawn_death_vfx() -> void:
+	if death_effect_scene == null:
+		return
+
+	var effect: Node2D = death_effect_scene.instantiate() as Node2D
+	if effect == null:
+		return
+
+	var parent: Node = get_parent()
+	if parent == null:
+		return
+
+	parent.add_child(effect)
+	effect.global_position = global_position
+# ------------------------------
+
+# ... (zbytek původních funkcí zůstává stejný)
+
+func _on_damage_area_body_entered(body: Node2D) -> void:
+	_try_start_contact(body)
+
+func _on_damage_area_body_exited(body: Node2D) -> void:
+	if body != tracked_body:
+		return
+	_clear_damage_tracking()
+
+func _on_damage_timer_timeout() -> void:
+	if tracked_body == null or not is_instance_valid(tracked_body):
+		_clear_damage_tracking()
+		return
+	if tracked_damage_target == null or not is_instance_valid(tracked_damage_target):
+		tracked_damage_target = _find_damage_target(tracked_body)
+		if tracked_damage_target == null:
+			_clear_damage_tracking()
+			return
+	_apply_contact_damage()
 
 func _apply_contact_damage() -> void:
 	if tracked_damage_target.has_method(\"damage\"):
 		tracked_damage_target.damage(CONTACT_DAMAGE)
 	elif tracked_damage_target.has_method(\"set_health\"):
 		tracked_damage_target.set_health(tracked_damage_target.current_hp - CONTACT_DAMAGE)
-
 	_apply_knockback()
 	_rebound_from_target()
 
 func _apply_knockback() -> void:
 	if tracked_body == null or not is_instance_valid(tracked_body):
 		return
-
 	var target_body: CharacterBody2D = null
 	if tracked_body is CharacterBody2D:
 		target_body = tracked_body
 	elif tracked_body.get_parent() is CharacterBody2D:
 		target_body = tracked_body.get_parent()
-
 	if target_body == null:
 		return
-
 	var knockback_direction: float = 1.0
 	if target_body.global_position.x < global_position.x:
 		knockback_direction = -1.0
 	elif target_body.global_position.x == global_position.x and velocity.x < 0.0:
 		knockback_direction = -1.0
-
 	target_body.velocity.x = knockback_direction * KNOCKBACK_FORCE_X
 	target_body.velocity.y = min(target_body.velocity.y, KNOCKBACK_FORCE_Y)
 
 func _rebound_from_target() -> void:
 	if tracked_body == null or not is_instance_valid(tracked_body):
 		return
-
 	var target_position: Vector2 = tracked_body.global_position
 	if tracked_body.get_parent() is Node2D:
 		target_position = tracked_body.get_parent().global_position
-
 	var away_direction: Vector2 = global_position - target_position
 	if away_direction.length_squared() <= 0.001:
 		away_direction = -velocity
 	if away_direction.length_squared() <= 0.001:
 		away_direction = Vector2.LEFT
-
 	velocity = away_direction.normalized() * BOSS_REBOUND_SPEED
 
 func _clear_damage_tracking() -> void:
@@ -131,7 +146,6 @@ func _refresh_damage_tracking() -> void:
 	if overlapping_player != null:
 		_try_start_contact(overlapping_player)
 		return
-
 	if tracked_body != null and is_instance_valid(tracked_body):
 		_clear_damage_tracking()
 
@@ -151,13 +165,11 @@ func _try_start_contact_from_collider(collider: Object) -> void:
 func _try_start_contact(body: Node2D) -> void:
 	if not _is_player_body(body):
 		return
-
 	tracked_body = body
 	tracked_damage_target = _find_damage_target(body)
 	if tracked_damage_target == null:
 		_clear_damage_tracking()
 		return
-
 	if damage_timer.is_stopped():
 		_apply_contact_damage()
 		damage_timer.start(DAMAGE_INTERVAL)
@@ -170,15 +182,12 @@ func _is_player_body(body: Node2D) -> bool:
 func _find_damage_target(body: Node2D) -> Node:
 	if body.has_method(\"damage\") or body.has_method(\"set_health\"):
 		return body
-
 	var parent := body.get_parent()
 	if parent != null and (parent.has_method(\"damage\") or parent.has_method(\"set_health\")):
 		return parent
-
 	var current_scene := get_tree().current_scene
 	if current_scene == null:
 		return null
-
 	var healthbar := current_scene.find_child(\"Healthbar\", true, false)
 	if healthbar == null:
 		healthbar = current_scene.find_child(\"healthbar\", true, false)

@@ -77,12 +77,13 @@ animations = [{
 "texture": SubResource("AtlasTexture_6y4wd")
 }],
 "loop": false,
-"name": &"default",
+"name": &"death",
 "speed": 10.0
 }]
 
 [node name="GPUParticles2D" type="AnimatedSprite2D" unique_id=806057524]
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_3yva7")
-autoplay = "default"
+animation = &"death"
+autoplay = "death"
 script = ExtResource("1_ah5qx")
