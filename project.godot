@@ -10,10 +10,11 @@ config_version=5
 
 [application]
 
-config/name="GameJam"
+config/name="CatJam"
+config/version="1.0.1"
 run/main_scene="uid://dvj648prwb6g7"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://c851a0gs64fox"
 
 [audio]
 

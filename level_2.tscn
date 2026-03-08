@@ -530,12 +530,12 @@ one_way_collision = true
 [node name="ryba" parent="StaticBody2D" unique_id=1774917523 instance=ExtResource("3_7j8ne")]
 position = Vector2(-31.009125, -32.44036)
 scale = Vector2(0.5, 0.5)
-collision_mask = 1
+collision_mask = 5
 
 [node name="ryba2" parent="StaticBody2D" unique_id=7835955 instance=ExtResource("3_7j8ne")]
 position = Vector2(-805.5, -33.541)
 scale = Vector2(0.5, 0.5)
-collision_mask = 1
+collision_mask = 5
 
 [node name="yarnboss" parent="." unique_id=566931756 instance=ExtResource("3_xdadj")]
 position = Vector2(1042, 241)

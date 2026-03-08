@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://mv0s14gw8um8" path="res://scripts/Endscreen.gd" id="1_ekb8w"]
 [ext_resource type="FontFile" uid="uid://c1820v3ck2hjv" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8.ttf" id="2_8dv01"]
 [ext_resource type="Texture2D" uid="uid://dskj0d3e2p0op" path="res://assets/fish_green1_1.png" id="2_lmk8k"]
+[ext_resource type="AudioStream" path="res://assets/Sounds/Music/mouse (online-audio-converter.com).mp3" id="3_4d7na"]
 [ext_resource type="Texture2D" uid="uid://dr88l8smnlujo" path="res://assets/FREE_Cat 2D Pixel Art/Sprites/IDLE.png" id="4_3w1jx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3w1jx"]
@@ -285,6 +286,11 @@ scale = Vector2(3.4999998, 3.5)
 sprite_frames = SubResource("SpriteFrames_puu6h")
 autoplay = "default"
 frame_progress = 0.7372523
+
+[node name="VictoryMusic" type="AudioStreamPlayer" parent="." unique_id=1297760118]
+stream = ExtResource("3_4d7na")
+autoplay = true
+volume_db = -6.0
 
 [connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/Restart" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="ButtonsCard/ButtonsPadding/ButtonsColumn/Lobby" to="." method="_on_lobby_pressed"]
