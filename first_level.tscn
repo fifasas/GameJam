@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bljfg3rpj7mqf" path="res://player_char.tscn" id="5_mne6x"]
 [ext_resource type="PackedScene" uid="uid://cghsfpb1ugrfa" path="res://Ingame menu.tscn" id="6_igtk7"]
 [ext_resource type="Texture2D" uid="uid://qcmljy1av1t5" path="res://assets/animations/arrow_sheet.png" id="7_5jff8"]
+[ext_resource type="AudioStream" uid="uid://dtbtxv6qaqdn4" path="res://assets/Tiny Swords (Free Pack)/Particle FX/mouse (online-audio-converter.com) (1).mp3" id="7_ehg42"]
 
 [sub_resource type="GDScript" id="GDScript_first_level_local"]
 script/source = "extends Node2D
@@ -597,6 +598,11 @@ sprite_frames = SubResource("SpriteFrames_lla4x")
 autoplay = "default"
 frame_progress = 0.54436964
 speed_scale = 5.0
+
+[node name="Mouse(onlineAudioConverter_com)(1)" type="AudioStreamPlayer2D" parent="." unique_id=1948326500]
+position = Vector2(437, 823)
+stream = ExtResource("7_ehg42")
+autoplay = true
 
 [connection signal="boss_defeated" from="mouse" to="." method="_on_mouse_boss_defeated"]
 [connection signal="body_entered" from="ExitZone" to="." method="_on_exit_zone_body_entered"]

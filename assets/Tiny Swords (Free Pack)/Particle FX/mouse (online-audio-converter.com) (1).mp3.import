@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dtbtxv6qaqdn4"
+path="res://.godot/imported/mouse (online-audio-converter.com) (1).mp3-d38f1cdd97aa8f6b0afef8f8ed58aee0.mp3str"
+
+[deps]
+
+source_file="res://assets/Tiny Swords (Free Pack)/Particle FX/mouse (online-audio-converter.com) (1).mp3"
+dest_files=["res://.godot/imported/mouse (online-audio-converter.com) (1).mp3-d38f1cdd97aa8f6b0afef8f8ed58aee0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
