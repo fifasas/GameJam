@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://b8jagnokh8ipr"]
+
+[ext_resource type="Script" uid="uid://sy7f73wk5h56" path="res://scripts/particles.gd" id="1_ah5qx"]
+[ext_resource type="Texture2D" uid="uid://cgnmvvkhort8a" path="res://assets/Tiny Swords (Free Pack)/Particle FX/Dust_02.png" id="2_ispy0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ah5qx"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ispy0"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65ldm"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2cpn"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qc1mw"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kba5s"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1336c"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n4emo"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8fom"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(512, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6y4wd"]
+atlas = ExtResource("2_ispy0")
+region = Rect2(576, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3yva7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ah5qx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ispy0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65ldm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u2cpn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qc1mw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kba5s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1336c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n4emo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8fom")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6y4wd")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="GPUParticles2D" type="AnimatedSprite2D" unique_id=806057524]
+use_parent_material = true
+sprite_frames = SubResource("SpriteFrames_3yva7")
+autoplay = "default"
+script = ExtResource("1_ah5qx")

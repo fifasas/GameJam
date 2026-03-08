@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://dpc5svoolfgh2"]
+
+[ext_resource type="Script" uid="uid://sy7f73wk5h56" path="res://scripts/particles.gd" id="1_xnif8"]
+[ext_resource type="Texture2D" uid="uid://cgnmvvkhort8a" path="res://assets/Tiny Swords (Free Pack)/Particle FX/Dust_02.png" id="2_1nvrg"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1nvrg"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4h77"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0756t"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_75ba6"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_deg5m"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2nca"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjc5h"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8sith"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4lexi"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gnpo"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(512, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15lhj"]
+atlas = ExtResource("2_1nvrg")
+region = Rect2(576, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kcb7q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s4h77")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0756t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_75ba6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_deg5m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2nca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sjc5h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8sith")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4lexi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gnpo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15lhj")
+}],
+"loop": true,
+"name": &"death",
+"speed": 10.0
+}]
+
+[node name="GPUParticles2D" type="GPUParticles2D" unique_id=1796608057]
+use_parent_material = true
+emitting = false
+sub_emitter = NodePath(".")
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_1nvrg")
+script = ExtResource("1_xnif8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1180631240]
+sprite_frames = SubResource("SpriteFrames_kcb7q")
+animation = &"death"
+frame_progress = 0.49347615

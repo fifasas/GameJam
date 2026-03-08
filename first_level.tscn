@@ -114,9 +114,6 @@ b = Vector2(1150, 596)
 a = Vector2(1277, 596)
 b = Vector2(35, 596)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_drop_platform"]
-size = Vector2(220, 14)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nl2g"]
 size = Vector2(799, 385.5)
 
@@ -561,19 +558,9 @@ shape = SubResource("SegmentShape2D_fnyhn")
 [node name="DropThroughPlatform" type="StaticBody2D" parent="Collision parts" unique_id=1087856044]
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision parts/DropThroughPlatform" unique_id=587962833]
-position = Vector2(372, 468)
-shape = SubResource("RectangleShape2D_drop_platform")
-one_way_collision = true
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision parts" unique_id=1566669247]
 position = Vector2(1673, 470)
 shape = SubResource("RectangleShape2D_5nl2g")
-
-[node name="DropThroughPlatformVisual" type="Polygon2D" parent="." unique_id=112258815]
-position = Vector2(372, 468)
-color = Color(0.905882, 0.741176, 0.470588, 0.9)
-polygon = PackedVector2Array(-110, -7, 110, -7, 110, 7, -110, 7)
 
 [node name="mouse" parent="." unique_id=237143598 instance=ExtResource("3_7m365")]
 position = Vector2(639, 598)

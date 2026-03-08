@@ -1,20 +1,25 @@
 [gd_scene format=3 uid="uid://c5xdx1fqfpw1d"]
 
 [ext_resource type="Texture2D" uid="uid://c5xftgnx3bvmt" path="res://assets/msprite final.png" id="1_7k104"]
+[ext_resource type="PackedScene" uid="uid://b8jagnokh8ipr" path="res://gpu_particles_2d.tscn" id="1_tewyd"]
 
 [sub_resource type="GDScript" id="GDScript_mouse"]
 script/source = "extends Node2D
 
 signal boss_defeated
 
-const SPEED := 60.0
+const SPEED := 150.0
 const CONTACT_DAMAGE := 10
 const DAMAGE_INTERVAL := 1.0
 const HIT_FLASH_DURATION := 0.3
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
 
-@export_range(1, 9999, 1) var max_hp: int = 10
-@export_range(0, 9999, 1) var current_hp: int = 10
+@export_group(\"Visual Effects\")
+## Zde v Inspektoru přiřaď scénu s AnimatedSprite2D (např. BossDeathEffect.tscn)
+@export var death_effect_scene: PackedScene 
+
+@export_range(1, 9999, 1) var max_hp: int = 50
+@export_range(0, 9999, 1) var current_hp: int = 25
 
 var direction := 1
 var hit_flash_id := 0
@@ -30,13 +35,43 @@ func _ready() -> void:
 	current_hp = clamp(current_hp, 0, max_hp)
 
 func _process(delta: float) -> void:
+	# Detekce stěn a otáčení
 	if ray_castright.is_colliding():
 		direction = -1
 		animated_sprite_2d.flip_h = true
 	if ray_castleft.is_colliding():
 		direction = 1
 		animated_sprite_2d.flip_h = false
+	
 	position.x += direction * SPEED * delta
+
+func take_damage(amount: int) -> void:
+	if amount <= 0 or current_hp <= 0:
+		return
+
+	current_hp = max(current_hp - amount, 0)
+	_flash_hit()
+	
+	if current_hp == 0:
+		_spawn_death_vfx() # Vytvoří animaci smrti
+		boss_defeated.emit()
+		queue_free() # Boss zmizí ze scény
+
+func _spawn_death_vfx() -> void:
+	if death_effect_scene == null:
+		print(\"Varování: death_effect_scene není přiřazena v Inspektoru!\")
+		return
+	
+	# Vytvoření instance efektu (výbuchu/animace)
+	var effect = death_effect_scene.instantiate()
+	
+	# Musíme efekt přidat do rodiče (levelu), aby nezmizel spolu s bossem
+	get_parent().add_child(effect)
+	
+	# Nastavení pozice tam, kde se boss právě nachází
+	effect.global_position = global_position
+
+# --- Logika poškození hráče ---
 
 func _on_damage_area_body_entered(body: Node2D) -> void:
 	if not _is_player_body(body):
@@ -54,9 +89,7 @@ func _on_damage_area_body_exited(body: Node2D) -> void:
 	if body != tracked_body:
 		return
 
-	tracked_body = null
-	tracked_damage_target = null
-	damage_timer.stop()
+	_clear_damage_tracking()
 
 func _on_damage_timer_timeout() -> void:
 	if tracked_body == null or not is_instance_valid(tracked_body):
@@ -72,28 +105,12 @@ func _on_damage_timer_timeout() -> void:
 	_apply_contact_damage()
 
 func _is_player_body(body: Node2D) -> bool:
-	if body.is_in_group(\"player\"):
-		return true
-	if body.name == \"CharacterBody2D\":
-		return true
-	return body.get_parent() != null and body.get_parent().name == \"player\"
-
-func take_damage(amount: int) -> void:
-	if amount <= 0 or current_hp <= 0:
-		return
-
-	current_hp = max(current_hp - amount, 0)
-	_flash_hit()
-	if current_hp == 0:
-		boss_defeated.emit()
-		queue_free()
+	return body.is_in_group(\"player\") or body.name == \"CharacterBody2D\" or (body.get_parent() != null and body.get_parent().name == \"player\")
 
 func _apply_contact_damage() -> void:
 	if tracked_damage_target.has_method(\"damage\"):
 		tracked_damage_target.damage(CONTACT_DAMAGE)
-		return
-
-	if tracked_damage_target.has_method(\"set_health\"):
+	elif tracked_damage_target.has_method(\"set_health\"):
 		tracked_damage_target.set_health(tracked_damage_target.current_hp - CONTACT_DAMAGE)
 
 func _clear_damage_tracking() -> void:
@@ -104,19 +121,12 @@ func _clear_damage_tracking() -> void:
 func _find_damage_target(body: Node2D) -> Node:
 	if body.has_method(\"damage\") or body.has_method(\"set_health\"):
 		return body
-
 	var parent := body.get_parent()
 	if parent != null and (parent.has_method(\"damage\") or parent.has_method(\"set_health\")):
 		return parent
+	return null
 
-	var current_scene := get_tree().current_scene
-	if current_scene == null:
-		return null
-
-	var healthbar := current_scene.find_child(\"Healthbar\", true, false)
-	if healthbar == null:
-		healthbar = current_scene.find_child(\"healthbar\", true, false)
-	return healthbar
+# --- Vizuální efekty zásahu (Flash) ---
 
 func _flash_hit() -> void:
 	hit_flash_id += 1
@@ -180,6 +190,7 @@ height = 94.0
 
 [node name="mouse" type="Node2D" unique_id=237143598 groups=["enemy"]]
 script = SubResource("GDScript_mouse")
+death_effect_scene = ExtResource("1_tewyd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1091228300]
 sprite_frames = SubResource("SpriteFrames_wujgv")
@@ -196,7 +207,6 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_qi2p4")
 
 [node name="DamageTimer" type="Timer" parent="." unique_id=1156119116]
-wait_time = 1.0
 
 [node name="RayCastright" type="RayCast2D" parent="." unique_id=1009754148]
 position = Vector2(14, 28)
