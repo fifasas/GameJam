@@ -48,9 +48,11 @@ var is_sprinting := false
 var healthbar: Node = null
 var hit_flash_id := 0
 var rng := RandomNumberGenerator.new()
+var attack_hit_targets: Array[Node] = []
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
+@onready var attack_collision_shape: CollisionShape2D = $AttackArea/CollisionShape2D
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var attack_sound_player: AudioStreamPlayer = $AttackSoundPlayer
 @onready var hit_sound_player: AudioStreamPlayer = $HitSoundPlayer
@@ -62,6 +64,11 @@ func _ready() -> void:
 	healthbar = _find_healthbar()
 	_setup_healthbar()
 	_sync_healthbar()
+	_set_attack_hitbox_enabled(false)
+	if not attack_area.area_entered.is_connected(_on_attack_area_area_entered):
+		attack_area.area_entered.connect(_on_attack_area_area_entered)
+	if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
+		attack_area.body_entered.connect(_on_attack_area_body_entered)
 	_update_attack_area()
 	_update_animation()
 
@@ -145,30 +152,22 @@ func _try_attack() -> void:
 		return
 
 	is_attacking = true
+	attack_hit_targets.clear()
 	attack_cooldown_timer.start(ATTACK_COOLDOWN)
 	animated_sprite_2d.play(\"attack\")
 	_play_attack_sound()
 	_update_attack_area()
+	_set_attack_hitbox_enabled(true)
 	call_deferred(\"_perform_attack_hit\")
 
 func _perform_attack_hit() -> void:
 	await get_tree().physics_frame
 
-	var hit_targets: Array[Node] = []
 	for area in attack_area.get_overlapping_areas():
-		var target := area.get_parent()
-		if target == null or target == self or hit_targets.has(target):
-			continue
-		if target.has_method(\"take_damage\"):
-			target.take_damage(ATTACK_DAMAGE)
-			hit_targets.append(target)
+		_try_hit_attack_target(area)
 
 	for body in attack_area.get_overlapping_bodies():
-		if body == self or hit_targets.has(body):
-			continue
-		if body.has_method(\"take_damage\"):
-			body.take_damage(ATTACK_DAMAGE)
-			hit_targets.append(body)
+		_try_hit_attack_target(body)
 
 func _update_attack_area() -> void:
 	attack_area.position = Vector2(18 * facing_direction, 4)
@@ -190,7 +189,43 @@ func _update_animation() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite_2d.animation == &\"attack\":
 		is_attacking = false
+		_set_attack_hitbox_enabled(false)
+		attack_hit_targets.clear()
 		_update_animation()
+
+func _on_attack_area_area_entered(area: Area2D) -> void:
+	_try_hit_attack_target(area)
+
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	_try_hit_attack_target(body)
+
+func _try_hit_attack_target(source: Node) -> void:
+	if not is_attacking:
+		return
+
+	var target: Node = _resolve_attack_target(source)
+	if target == null or target == self or attack_hit_targets.has(target):
+		return
+	if not target.has_method(\"take_damage\"):
+		return
+
+	target.take_damage(ATTACK_DAMAGE)
+	attack_hit_targets.append(target)
+
+func _resolve_attack_target(source: Node) -> Node:
+	if source == null:
+		return null
+	if source.has_method(\"take_damage\"):
+		return source
+
+	var parent := source.get_parent()
+	if parent != null and parent.has_method(\"take_damage\"):
+		return parent
+	return null
+
+func _set_attack_hitbox_enabled(enabled: bool) -> void:
+	attack_area.monitoring = enabled
+	attack_collision_shape.disabled = not enabled
 
 func drop_through() -> void:
 	if is_dropping_through or not is_on_floor():

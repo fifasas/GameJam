@@ -239,6 +239,9 @@ radius = 31.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_damage_area"]
 radius = 52.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_hurt_area"]
+radius = 36.0
+
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=566931756 groups=["enemy"]]
 motion_mode = 1
 script = SubResource("GDScript_yarnboss")
@@ -252,6 +255,13 @@ frame_progress = 0.4166169
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=11564220]
 position = Vector2(1, 0)
 shape = SubResource("CircleShape2D_en4gc")
+
+[node name="HurtArea" type="Area2D" parent="." unique_id=193458122]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea" unique_id=1302849923]
+shape = SubResource("CircleShape2D_hurt_area")
 
 [node name="DamageArea" type="Area2D" parent="." unique_id=411657808]
 collision_layer = 0

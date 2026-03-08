@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dsbanamoepxgx"
+path="res://.godot/imported/tapkanie raz.mp3-7887ac33eb40c8e0b42e598a0d0ffd77.mp3str"
+
+[deps]
+
+source_file="res://assets/Sounds/tapkanie raz.mp3"
+dest_files=["res://.godot/imported/tapkanie raz.mp3-7887ac33eb40c8e0b42e598a0d0ffd77.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

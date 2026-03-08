@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bq6pf2v7wgrqk"
+path="res://.godot/imported/mys smrt.mp3-6b14c2df080addeffb2ebccce570612b.mp3str"
+
+[deps]
+
+source_file="res://assets/Sounds/mys smrt.mp3"
+dest_files=["res://.godot/imported/mys smrt.mp3-6b14c2df080addeffb2ebccce570612b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

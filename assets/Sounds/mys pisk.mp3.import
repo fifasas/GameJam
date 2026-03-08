@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bqacwp546ocrp"
+path="res://.godot/imported/mys pisk.mp3-aa0e3328fba56fb5de752b7e41b26529.mp3str"
+
+[deps]
+
+source_file="res://assets/Sounds/mys pisk.mp3"
+dest_files=["res://.godot/imported/mys pisk.mp3-aa0e3328fba56fb5de752b7e41b26529.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

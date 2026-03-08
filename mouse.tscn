@@ -13,10 +13,10 @@ const CONTACT_DAMAGE := 10
 const DAMAGE_INTERVAL := 1.0
 const HIT_FLASH_DURATION := 0.3
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+const DEATH_SOUND: AudioStream = preload(\"res://assets/Sounds/mys smrt.mp3\")
 
 @export_group(\"Visual Effects\")
-## Zde v Inspektoru přiřaď scénu s AnimatedSprite2D (např. BossDeathEffect.tscn)
-@export var death_effect_scene: PackedScene 
+@export var death_effect_scene: PackedScene
 
 @export_range(1, 9999, 1) var max_hp: int = 50
 @export_range(0, 9999, 1) var current_hp: int = 25
@@ -35,14 +35,13 @@ func _ready() -> void:
 	current_hp = clamp(current_hp, 0, max_hp)
 
 func _process(delta: float) -> void:
-	# Detekce stěn a otáčení
 	if ray_castright.is_colliding():
 		direction = -1
 		animated_sprite_2d.flip_h = true
 	if ray_castleft.is_colliding():
 		direction = 1
 		animated_sprite_2d.flip_h = false
-	
+
 	position.x += direction * SPEED * delta
 
 func take_damage(amount: int) -> void:
@@ -51,27 +50,43 @@ func take_damage(amount: int) -> void:
 
 	current_hp = max(current_hp - amount, 0)
 	_flash_hit()
-	
+
 	if current_hp == 0:
-		_spawn_death_vfx() # Vytvoří animaci smrti
+		_spawn_death_vfx()
+		_play_death_sound()
 		boss_defeated.emit()
-		queue_free() # Boss zmizí ze scény
+		queue_free()
 
 func _spawn_death_vfx() -> void:
 	if death_effect_scene == null:
-		print(\"Varování: death_effect_scene není přiřazena v Inspektoru!\")
 		return
-	
-	# Vytvoření instance efektu (výbuchu/animace)
-	var effect = death_effect_scene.instantiate()
-	
-	# Musíme efekt přidat do rodiče (levelu), aby nezmizel spolu s bossem
-	get_parent().add_child(effect)
-	
-	# Nastavení pozice tam, kde se boss právě nachází
+
+	var effect: Node2D = death_effect_scene.instantiate() as Node2D
+	if effect == null:
+		return
+
+	var parent: Node = get_parent()
+	if parent == null:
+		return
+
+	parent.add_child(effect)
 	effect.global_position = global_position
 
-# --- Logika poškození hráče ---
+func _play_death_sound() -> void:
+	if DEATH_SOUND == null:
+		return
+
+	var parent: Node = get_parent()
+	if parent == null:
+		return
+
+	var sound_player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
+	sound_player.stream = DEATH_SOUND
+	sound_player.volume_db = 6.0
+	parent.add_child(sound_player)
+	sound_player.global_position = global_position
+	sound_player.finished.connect(Callable(sound_player, \"queue_free\"))
+	sound_player.play()
 
 func _on_damage_area_body_entered(body: Node2D) -> void:
 	if not _is_player_body(body):
@@ -125,8 +140,6 @@ func _find_damage_target(body: Node2D) -> Node:
 	if parent != null and (parent.has_method(\"damage\") or parent.has_method(\"set_health\")):
 		return parent
 	return null
-
-# --- Vizuální efekty zásahu (Flash) ---
 
 func _flash_hit() -> void:
 	hit_flash_id += 1
