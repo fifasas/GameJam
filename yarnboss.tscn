@@ -52,6 +52,8 @@ const CONTACT_DAMAGE := 15
 const DAMAGE_INTERVAL := 1.0
 const HIT_FLASH_DURATION := 0.2
 const HIT_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+const KNOCKBACK_FORCE_X := 820.0
+const KNOCKBACK_FORCE_Y := -360.0
 
 @export_range(1, 9999, 1) var max_hp: int = 20
 @export_range(0, 9999, 1) var current_hp: int = 20
@@ -120,10 +122,32 @@ func take_damage(amount: int) -> void:
 func _apply_contact_damage() -> void:
 	if tracked_damage_target.has_method(\"damage\"):
 		tracked_damage_target.damage(CONTACT_DAMAGE)
+	elif tracked_damage_target.has_method(\"set_health\"):
+		tracked_damage_target.set_health(tracked_damage_target.current_hp - CONTACT_DAMAGE)
+
+	_apply_knockback()
+
+func _apply_knockback() -> void:
+	if tracked_body == null or not is_instance_valid(tracked_body):
 		return
 
-	if tracked_damage_target.has_method(\"set_health\"):
-		tracked_damage_target.set_health(tracked_damage_target.current_hp - CONTACT_DAMAGE)
+	var target_body: CharacterBody2D = null
+	if tracked_body is CharacterBody2D:
+		target_body = tracked_body
+	elif tracked_body.get_parent() is CharacterBody2D:
+		target_body = tracked_body.get_parent()
+
+	if target_body == null:
+		return
+
+	var knockback_direction: float = 1.0
+	if target_body.global_position.x < global_position.x:
+		knockback_direction = -1.0
+	elif target_body.global_position.x == global_position.x and velocity.x < 0.0:
+		knockback_direction = -1.0
+
+	target_body.velocity.x = knockback_direction * KNOCKBACK_FORCE_X
+	target_body.velocity.y = min(target_body.velocity.y, KNOCKBACK_FORCE_Y)
 
 func _clear_damage_tracking() -> void:
 	tracked_body = null

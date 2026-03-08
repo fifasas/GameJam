@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://h1ug051ojklg"
+path="res://.godot/imported/mouse (online-audio-converter.com).mp3-42742c71ca38c2f123f5902d26ef430c.mp3str"
+
+[deps]
+
+source_file="res://assets/Sounds/Music/mouse (online-audio-converter.com).mp3"
+dest_files=["res://.godot/imported/mouse (online-audio-converter.com).mp3-42742c71ca38c2f123f5902d26ef430c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

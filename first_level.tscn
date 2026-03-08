@@ -602,6 +602,7 @@ speed_scale = 5.0
 [node name="Mouse(onlineAudioConverter_com)(1)" type="AudioStreamPlayer2D" parent="." unique_id=1948326500]
 position = Vector2(437, 823)
 stream = ExtResource("7_ehg42")
+volume_db = -16.0
 autoplay = true
 
 [connection signal="boss_defeated" from="mouse" to="." method="_on_mouse_boss_defeated"]

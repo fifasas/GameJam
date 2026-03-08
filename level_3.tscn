@@ -21,11 +21,14 @@ const DEATH_SCREEN_PATH := \"res://DeathScreen.tscn\"
 const DEATH_SCREEN_PENDING_KEY := &\"show_death_screen_after_reload\"
 const HEALING_SLOT_XS := [760.0, 1120.0, 1480.0, 1840.0, 2200.0]
 const HEALING_GROUND_Y := 889.0
-const MIN_HEALING_SPAWNS := 1
 const MAX_HEALING_SPAWNS := 2
 const HEALING_X_JITTER := 55.0
+const HEALING_RESPAWN_DELAY_MIN := 8.0
+const HEALING_RESPAWN_DELAY_MAX := 13.0
 
 var boss_music_started := false
+var active_healing_slots := {}
+var pending_healing_respawns := 0
 var rng := RandomNumberGenerator.new()
 
 @onready var log_bridge: Node2D = $Log
@@ -110,15 +113,47 @@ func _release_wolf() -> void:
 	wolf.set_physics_process(true)
 
 func _spawn_random_healing() -> void:
-	var slot_xs: Array = HEALING_SLOT_XS.duplicate()
-	slot_xs.shuffle()
-	var spawn_count := rng.randi_range(MIN_HEALING_SPAWNS, min(MAX_HEALING_SPAWNS, slot_xs.size()))
+	var initial_spawn_count: int = min(MAX_HEALING_SPAWNS, HEALING_SLOT_XS.size())
+	for _i in range(initial_spawn_count):
+		if not _spawn_healing_pickup():
+			break
 
-	for i in range(spawn_count):
-		var healing_pickup := HEALING_SCENE.instantiate()
-		var spawn_x: float = float(slot_xs[i]) + rng.randf_range(-HEALING_X_JITTER, HEALING_X_JITTER)
-		healing_pickup.position = Vector2(spawn_x, HEALING_GROUND_Y)
-		healing_spawns.add_child(healing_pickup)
+func _spawn_healing_pickup() -> bool:
+	var available_slot_indices: Array = []
+	for i in range(HEALING_SLOT_XS.size()):
+		if not active_healing_slots.has(i):
+			available_slot_indices.append(i)
+	if available_slot_indices.is_empty():
+		return false
+
+	available_slot_indices.shuffle()
+	var slot_index: int = int(available_slot_indices[0])
+	var healing_pickup: Node2D = HEALING_SCENE.instantiate() as Node2D
+	var spawn_x: float = float(HEALING_SLOT_XS[slot_index]) + rng.randf_range(-HEALING_X_JITTER, HEALING_X_JITTER)
+	healing_pickup.position = Vector2(spawn_x, HEALING_GROUND_Y)
+	active_healing_slots[slot_index] = healing_pickup
+	healing_spawns.add_child(healing_pickup)
+	if healing_pickup.has_signal(\"collected\"):
+		healing_pickup.connect(\"collected\", Callable(self, \"_on_healing_collected\").bind(slot_index), CONNECT_ONE_SHOT)
+	return true
+
+func _on_healing_collected(slot_index: int) -> void:
+	active_healing_slots.erase(slot_index)
+	_schedule_healing_respawn()
+
+func _schedule_healing_respawn() -> void:
+	if active_healing_slots.size() + pending_healing_respawns >= MAX_HEALING_SPAWNS:
+		return
+	pending_healing_respawns += 1
+	call_deferred(\"_respawn_healing_after_delay\")
+
+func _respawn_healing_after_delay() -> void:
+	await get_tree().create_timer(rng.randf_range(HEALING_RESPAWN_DELAY_MIN, HEALING_RESPAWN_DELAY_MAX)).timeout
+	pending_healing_respawns = max(pending_healing_respawns - 1, 0)
+	if not is_inside_tree():
+		return
+	if active_healing_slots.size() < MAX_HEALING_SPAWNS:
+		_spawn_healing_pickup()
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8bo8"]
